@@ -376,21 +376,26 @@ namespace Abot.Crawler
 
         /// <summary>
         /// Asynchronous event that is fired before a page is crawled.
+        /// 自定义事件：在页面被爬行执行执行
         /// </summary>
         public event EventHandler<PageCrawlStartingArgs> PageCrawlStartingAsync;
 
         /// <summary>
         /// Asynchronous event that is fired when an individual page has been crawled.
+        /// 自定义事件：页面被爬行之后
         /// </summary>
         public event EventHandler<PageCrawlCompletedArgs> PageCrawlCompletedAsync;
 
         /// <summary>
         /// Asynchronous event that is fired when the ICrawlDecisionMaker.ShouldCrawl impl returned false. This means the page or its links were not crawled.
+        /// 当 ICrawlDecisionMaker.ShouldCrawl 属性为false时被执行
+        /// 
         /// </summary>
         public event EventHandler<PageCrawlDisallowedArgs> PageCrawlDisallowedAsync;
 
         /// <summary>
         /// Asynchronous event that is fired when the ICrawlDecisionMaker.ShouldCrawlLinks impl returned false. This means the page's links were not crawled.
+        /// 当 ICrawlDecisionMaker.ShouldCrawl 属性为false时被执行
         /// </summary>
         public event EventHandler<PageLinksCrawlDisallowedArgs> PageLinksCrawlDisallowedAsync;
 
@@ -468,6 +473,10 @@ namespace Abot.Crawler
 
         /// <summary>
         /// Synchronous method that registers a delegate to be called to determine whether a page should be crawled or not
+        /// 自定义处理函数，用来决定一个页面是否被爬行
+        /// Func：委托
+        /// 入参为：PageToCrawl，CrawlContext
+        /// 出参：CrawlDecision
         /// </summary>
         public void ShouldCrawlPage(Func<PageToCrawl, CrawlContext, CrawlDecision> decisionMaker)
         {
@@ -476,6 +485,7 @@ namespace Abot.Crawler
 
         /// <summary>
         /// Synchronous method that registers a delegate to be called to determine whether the page's content should be dowloaded
+        /// 自定义处理函数，用来决定一个页面是否被下载爬行
         /// </summary>
         /// <param name="shouldDownloadPageContent"></param>
         public void ShouldDownloadPageContent(Func<CrawledPage, CrawlContext, CrawlDecision> decisionMaker)
@@ -485,6 +495,7 @@ namespace Abot.Crawler
 
         /// <summary>
         /// Synchronous method that registers a delegate to be called to determine whether a page's links should be crawled or not
+        /// 自定义处理函数，用来决定一个页面链接是否被爬行
         /// </summary>
         /// <param name="shouldCrawlPageLinksDelegate"></param>
         public void ShouldCrawlPageLinks(Func<CrawledPage, CrawlContext, CrawlDecision> decisionMaker)

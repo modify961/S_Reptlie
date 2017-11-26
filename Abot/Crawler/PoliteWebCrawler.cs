@@ -25,6 +25,7 @@ namespace Abot.Crawler
     }
     /// <summary>
     /// Extends the WebCrawler class and added politeness features like crawl delays and respecting robots.txt files. 
+    /// 拓展WebCrawler类以及增加自定义的crawl解析及robots.txt文件处理
     /// </summary>
     [Serializable]
     public class PoliteWebCrawler : WebCrawler, IPoliteWebCrawler

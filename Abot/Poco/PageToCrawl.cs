@@ -52,6 +52,7 @@ namespace Abot.Poco
 
         /// <summary>
         /// Whether the page is the root uri of the crawl
+        /// 
         /// </summary>
         public bool IsRoot { get; set; }
 

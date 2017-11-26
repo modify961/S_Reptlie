@@ -3,12 +3,20 @@ using System.Collections.Generic;
 
 namespace Abot.Poco
 {
+    /// <summary>
+    /// Crawl:爬行
+    /// 爬虫相关的配置项
+    /// </summary>
     [Serializable]
     public class CrawlConfiguration
     {
+        /// <summary>
+        /// 
+        /// </summary>
         public CrawlConfiguration()
         {
             MaxConcurrentThreads = 10;
+            //
             UserAgentString = "Mozilla/5.0 (Windows NT 6.3; Trident/7.0; rv:11.0) like Gecko";
             RobotsDotTextUserAgentString = "abot";
             MaxPagesToCrawl = 1000;
@@ -27,55 +35,71 @@ namespace Abot.Poco
 
         /// <summary>
         /// Max concurrent threads to use for http requests
+        /// 最大的链接线程并发Http请求数
+        /// 默认值为10
         /// </summary>
         public int MaxConcurrentThreads { get; set; }
 
         /// <summary>
         /// Maximum number of pages to crawl. 
         /// If zero, this setting has no effect
+        /// 最大的爬行网页数量。默认10000
+        /// 如果为0则无限制
+        /// 
         /// </summary>
         public int MaxPagesToCrawl { get; set; }
 
         /// <summary>
         /// Maximum number of pages to crawl per domain
         /// If zero, this setting has no effect.
+        /// 单页面最大的爬页面量，如果为0就没有限制
         /// </summary>
         public int MaxPagesToCrawlPerDomain { get; set; }
 
         /// <summary>
         /// Maximum size of page. If the page size is above this value, it will not be downloaded or processed
+        /// 最大的页面大小，如果查过这个大小，则会下载或者被自动处理掉
         /// If zero, this setting has no effect.
         /// </summary>
         public int MaxPageSizeInBytes { get; set; }
 
         /// <summary>
         /// The user agent string to use for http requests
+        /// User Agent中文名为用户代理，简称 UA，它是一个特殊字符串头
+        /// ，使得服务器能够识别客户使用的操作系统及版本、CPU 类型、浏览器及版本、浏览器渲染引擎、浏览器语言、浏览器插件等。
         /// </summary>
         public string UserAgentString { get; set; }
 
         /// <summary>
         /// Maximum seconds before the crawl times out and stops. 
         /// If zero, this setting has no effect.
+        /// 最大超时时间
         /// </summary>
         public int CrawlTimeoutSeconds { get; set; }
 
         /// <summary>
         /// Dictionary that stores additional keyvalue pairs that can be accessed throught the crawl pipeline
+        /// 存储爬行过的URL地址
         /// </summary>
         public Dictionary<string, string> ConfigurationExtensions { get; set; }
 
         /// <summary>
         /// Whether Uris should be crawled more than once. This is not common and should be false for most scenarios
+        /// 设置URI是否需要爬行多次
         /// </summary>
         public bool IsUriRecrawlingEnabled { get; set; }
 
         /// <summary>
         /// Whether pages external to the root uri should be crawled
+        /// 是否可以爬拓展链接，根节点以外的链接
+        /// external：扩展
         /// </summary>
         public bool IsExternalPageCrawlingEnabled { get; set; }
 
         /// <summary>
         /// Whether pages external to the root uri should have their links crawled. NOTE: IsExternalPageCrawlEnabled must be true for this setting to have any effect
+        /// 前置条件：IsExternalPageCrawlEnabled 必须为true
+        /// 配置扩展链接的子链接是否被爬行
         /// </summary>
         public bool IsExternalPageLinksCrawlingEnabled { get; set; }
 
@@ -85,7 +109,11 @@ namespace Abot.Poco
         public bool IsRespectUrlNamedAnchorOrHashbangEnabled { get; set; }
 
         /// <summary>
-        /// A comma seperated string that has content types that should have their page content downloaded. For each page, the content type is checked to see if it contains any of the values defined here.
+        /// A comma seperated string that has content types that should have their page content downloaded.
+        /// For each page, the content type is checked to see if it contains any of the values defined here.
+        /// 配置包含哪些content-type的页面可以被下载，系统会检查每个页面的content-type，如果包含在这个字符串里面
+        /// 则会下载
+        /// 多个content-type 需要用,隔开"text/html, text/plain";
         /// </summary>
         public string DownloadableContentTypes { get; set; }
 
@@ -180,6 +208,9 @@ namespace Abot.Poco
 
         /// <summary>
         /// Whether the crawler should retrieve and respect the robots.txt file.
+        /// 爬虫是否应该获取并遵守robots.txt的约定
+        /// robots.txt：爬虫协议（网络爬虫排除标准”（Robots Exclusion Protocol），
+        /// 网站通过Robots协议告诉搜索引擎哪些页面可以抓取，哪些页面不能抓取。
         /// </summary>
         public bool IsRespectRobotsDotTextEnabled { get; set; }
 
@@ -210,6 +241,7 @@ namespace Abot.Poco
 
         /// <summary>
         /// The number of milliseconds to wait in between http requests to the same domain.
+        /// 每爬一个页面等多少毫秒
         /// </summary>
         public int MinCrawlDelayPerDomainMilliSeconds { get; set; }
 
