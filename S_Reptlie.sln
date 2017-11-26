@@ -28,6 +28,10 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Reptlie", "Reptlie\", "{1A0
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Abot", "Abot\Abot.csproj", "{0CDCD537-4B0E-4514-966F-F425CDC92BA4}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Logics", "Logics", "{2E698169-4891-497F-AC73-E8DB3D515589}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logic", "Logics\Logic\Logic.csproj", "{CE7762F6-EA7A-4003-A45C-8F3E2EE7D195}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,9 +46,16 @@ Global
 		{0CDCD537-4B0E-4514-966F-F425CDC92BA4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0CDCD537-4B0E-4514-966F-F425CDC92BA4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0CDCD537-4B0E-4514-966F-F425CDC92BA4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CE7762F6-EA7A-4003-A45C-8F3E2EE7D195}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE7762F6-EA7A-4003-A45C-8F3E2EE7D195}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE7762F6-EA7A-4003-A45C-8F3E2EE7D195}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE7762F6-EA7A-4003-A45C-8F3E2EE7D195}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{CE7762F6-EA7A-4003-A45C-8F3E2EE7D195} = {2E698169-4891-497F-AC73-E8DB3D515589}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {54B420AD-885C-4F6B-9F11-C30B65D71539}
