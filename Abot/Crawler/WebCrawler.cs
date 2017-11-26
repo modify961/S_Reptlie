@@ -376,7 +376,7 @@ namespace Abot.Crawler
 
         /// <summary>
         /// Asynchronous event that is fired before a page is crawled.
-        /// 自定义事件：在页面被爬行执行执行
+        /// 自定义事件：在页面被爬行之前执行
         /// </summary>
         public event EventHandler<PageCrawlStartingArgs> PageCrawlStartingAsync;
 
