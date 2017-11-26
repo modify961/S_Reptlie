@@ -21,16 +21,26 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Reptlie", "Reptlie\", "{1A0
 		Release.AspNetCompiler.FixedNames = "false"
 		Release.AspNetCompiler.Debug = "False"
 		VWDPort = "49459"
+		SlnRelativePath = "Reptlie\"
 		DefaultWebSiteLanguage = "Visual C#"
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Abot", "Abot\Abot.csproj", "{0CDCD537-4B0E-4514-966F-F425CDC92BA4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{1A02D73B-F28D-40F6-A2C8-A86C105550F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1A02D73B-F28D-40F6-A2C8-A86C105550F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A02D73B-F28D-40F6-A2C8-A86C105550F7}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A02D73B-F28D-40F6-A2C8-A86C105550F7}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{0CDCD537-4B0E-4514-966F-F425CDC92BA4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0CDCD537-4B0E-4514-966F-F425CDC92BA4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0CDCD537-4B0E-4514-966F-F425CDC92BA4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0CDCD537-4B0E-4514-966F-F425CDC92BA4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
