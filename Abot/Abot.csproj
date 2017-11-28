@@ -100,6 +100,11 @@
     <Compile Include="Core\CompactCrawledUrlRepository.cs" />
     <Compile Include="Core\AngleSharpHyperLinkParser.cs" />
     <Compile Include="Crawler\RobotsDotTextParseCompletedArgs.cs" />
+    <Compile Include="Logic\AbotContext.cs" />
+    <Compile Include="Logic\AbotFactory.cs" />
+    <Compile Include="Logic\enums\AbotTypeEnum.cs" />
+    <Compile Include="Logic\IAbotProceed.cs" />
+    <Compile Include="Logic\News\AbotNews.cs" />
     <Compile Include="Poco\HttpWebResponseWrapper.cs" />
     <Compile Include="Util\BloomFilter.cs" />
     <Compile Include="Util\CachedMemoryMonitor.cs" />
