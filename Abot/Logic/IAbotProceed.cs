@@ -12,6 +12,11 @@ namespace Abot.Logic
     public interface IAbotProceed
     {
         /// <summary>
+        /// 返回种子节点
+        /// </summary>
+        /// <returns></returns>
+        Uri obtainFeedUrl();
+        /// <summary>
         /// crawler_ProcessPageCrawlStarting:在页面被爬行之前执行的处理方法
         /// </summary>
         /// <param name="sender"></param>

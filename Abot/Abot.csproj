@@ -104,6 +104,7 @@
     <Compile Include="Logic\AbotFactory.cs" />
     <Compile Include="Logic\enums\AbotTypeEnum.cs" />
     <Compile Include="Logic\IAbotProceed.cs" />
+    <Compile Include="Logic\News\AbotDianping.cs" />
     <Compile Include="Logic\News\AbotNews.cs" />
     <Compile Include="Poco\HttpWebResponseWrapper.cs" />
     <Compile Include="Util\BloomFilter.cs" />

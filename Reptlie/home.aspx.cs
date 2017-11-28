@@ -57,11 +57,11 @@ public partial class home : System.Web.UI.Page
         AbotFactory abotFactory = new AbotFactory();
         AbotContext abotContext = new AbotContext()
         {
-            abotTypeEnum = AbotTypeEnum.NEWS
+            abotTypeEnum = AbotTypeEnum.DZDP
         };
         iAbotProceed = abotFactory.execute(abotContext);
         var crawler = GetManuallyConfiguredWebCrawler();
-        var result = crawler.Crawl(new Uri(@"http://news.cnblogs.com/"));
+        var result = crawler.Crawl(iAbotProceed.obtainFeedUrl());
         Label1.Text = "结束";
     }
     public  void crawler_ProcessPageCrawlStarting(object sender, PageCrawlStartingArgs e)

@@ -22,6 +22,9 @@ namespace Abot.Logic
                 case AbotTypeEnum.NEWS:
                     _iabotproceed = new AbotNews(_abotcontext);
                     break;
+                case AbotTypeEnum.DZDP:
+                    _iabotproceed = new AbotDianping(_abotcontext);
+                    break;
                 default:
                     break;
             }

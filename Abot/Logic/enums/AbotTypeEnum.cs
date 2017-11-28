@@ -16,6 +16,10 @@ namespace Abot.Logic.enums
         /// <summary>
         /// 股票
         /// </summary>
-        FINANCIAL=2
+        FINANCIAL=2,
+        /// <summary>
+        /// 大众点评
+        /// </summary>
+        DZDP=3
     }
 }

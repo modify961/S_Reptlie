@@ -31,7 +31,9 @@ namespace Abot.Poco
         public Uri ParentUri { get; set; }
 
         /// <summary>
-        /// Whether http requests had to be retried more than once. This could be due to throttling or politeness.
+        /// Whether http requests had to be retried more than once. 
+        /// This could be due to throttling or politeness.
+        /// 当前http请求是否被请多次获取，
         /// </summary>
         public bool IsRetry { get; set; }
 
@@ -52,12 +54,13 @@ namespace Abot.Poco
 
         /// <summary>
         /// Whether the page is the root uri of the crawl
-        /// 
+        /// 当前页面是不是跟页面
         /// </summary>
         public bool IsRoot { get; set; }
 
         /// <summary>
         /// Whether the page is internal to the root uri of the crawl
+        /// 是否为站内页面
         /// </summary>
         public bool IsInternal { get; set; }
 
