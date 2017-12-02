@@ -57,7 +57,7 @@ public partial class home : System.Web.UI.Page
         AbotFactory abotFactory = new AbotFactory();
         AbotContext abotContext = new AbotContext()
         {
-            abotTypeEnum = AbotTypeEnum.DZDP
+            abotTypeEnum = AbotTypeEnum.AGENT
         };
         iAbotProceed = abotFactory.execute(abotContext);
         var crawler = GetManuallyConfiguredWebCrawler();

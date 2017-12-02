@@ -10,7 +10,7 @@ namespace Abot.Crawler
     using System.Threading;
 
     /// <summary>
-    /// Polite web crawler
+    /// 遵守Robots.txt的爬行处理类
     /// </summary>
     public interface IPoliteWebCrawler : IWebCrawler
     {
@@ -66,7 +66,7 @@ namespace Abot.Crawler
             int robotsDotTextCrawlDelayInSecs = 0;
             int robotsDotTextCrawlDelayInMillisecs = 0;
 
-            //Load robots.txt
+            //爬虫是否应该获取并遵守robots.txt的约定
             if (_crawlContext.CrawlConfiguration.IsRespectRobotsDotTextEnabled)
             {
                 _robotsDotText = _robotsDotTextFinder.Find(uri);

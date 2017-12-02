@@ -13,6 +13,9 @@ using Timer = System.Timers.Timer;
 
 namespace Abot.Crawler
 {
+    /// <summary>
+    /// 当类及其业务逻辑中引用某些托管和非托管资源，就需要实现IDisposable接口，实现对这些资源对象的垃圾回收。
+    /// </summary>
     public interface IWebCrawler : IDisposable
     {
         /// <summary>
@@ -207,6 +210,7 @@ namespace Abot.Crawler
 
         /// <summary>
         /// Begins a synchronous crawl using the uri param, subscribe to events to process data as it becomes available
+        /// 根据URI开始抓取，并且在数据符合规则时调用自定义的处理函数
         /// </summary>
         public virtual CrawlResult Crawl(Uri uri)
         {
@@ -215,23 +219,26 @@ namespace Abot.Crawler
 
         /// <summary>
         /// Begins a synchronous crawl using the uri param, subscribe to events to process data as it becomes available
+        /// 根据URI开始抓取，并且在数据符合规则时调用自定义的处理函数
         /// </summary>
         public virtual CrawlResult Crawl(Uri uri, CancellationTokenSource cancellationTokenSource)
         {
             if (uri == null)
                 throw new ArgumentNullException("uri");
-
+            //设置根节点
             _crawlContext.RootUri = _crawlContext.OriginalRootUri = uri;
 
             if (cancellationTokenSource != null)
                 _crawlContext.CancellationTokenSource = cancellationTokenSource;
-
+            //爬取结果类
             _crawlResult = new CrawlResult();
             _crawlResult.RootUri = _crawlContext.RootUri;
             _crawlResult.CrawlContext = _crawlContext;
             _crawlComplete = false;
 
+            //_logger.InfoFormat("开始爬行站点 [{0}]", uri.AbsoluteUri);
             _logger.InfoFormat("About to crawl site [{0}]", uri.AbsoluteUri);
+            //打印配置项
             PrintConfigValues(_crawlContext.CrawlConfiguration);
 
             if (_memoryManager != null)
@@ -253,10 +260,12 @@ namespace Abot.Crawler
             try
             {
                 PageToCrawl rootPage = new PageToCrawl(uri) { ParentUri = uri, IsInternal = true, IsRoot = true };
+                //判断链接是否需要爬行
                 if (ShouldSchedulePageLink(rootPage))
                     _scheduler.Add(rootPage);
 
                 VerifyRequiredAvailableMemory();
+                //爬行站点
                 CrawlSite();
             }
             catch (Exception e)
@@ -543,6 +552,7 @@ namespace Abot.Crawler
         {
             while (!_crawlComplete)
             {
+                //爬行前检查
                 RunPreWorkChecks();
 
                 if (_scheduler.Count > 0)

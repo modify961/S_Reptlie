@@ -25,6 +25,9 @@ namespace Abot.Logic
                 case AbotTypeEnum.DZDP:
                     _iabotproceed = new AbotDianping(_abotcontext);
                     break;
+                case AbotTypeEnum.AGENT:
+                    _iabotproceed = new AbotAgent(_abotcontext);
+                    break;
                 default:
                     break;
             }

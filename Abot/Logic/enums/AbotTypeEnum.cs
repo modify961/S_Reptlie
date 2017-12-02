@@ -20,6 +20,10 @@ namespace Abot.Logic.enums
         /// <summary>
         /// 大众点评
         /// </summary>
-        DZDP=3
+        DZDP=3,
+        /// <summary>
+        /// 代理
+        /// </summary>
+        AGENT=4
     }
 }
