@@ -62,7 +62,8 @@ namespace Abot.Poco
         public bool IsCrawlStopRequested { get; set; }
 
         /// <summary>
-        /// Whether a request to hard stop the crawl has happened. Will clear all scheduled pages and cancel any threads that are currently crawling.
+        /// Whether a request to hard stop the crawl has happened.
+        /// Will clear all scheduled pages and cancel any threads that are currently crawling.
         /// </summary>
         public bool IsCrawlHardStopRequested { get; set; }
 
@@ -77,7 +78,9 @@ namespace Abot.Poco
         public int MemoryUsageAfterCrawlInMb { get; set; }
 
         /// <summary>
-        /// Cancellation token used to hard stop the crawl. Will clear all scheduled pages and abort any threads that are currently crawling.
+        /// Cancellation token used to hard stop the crawl.
+        /// Will clear all scheduled pages and abort any threads that are currently crawling.
+        /// CancellationTokenSource：用于线程中断
         /// </summary>
         public CancellationTokenSource CancellationTokenSource { get; set; }
     }

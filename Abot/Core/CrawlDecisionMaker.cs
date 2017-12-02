@@ -8,33 +8,46 @@ namespace Abot.Core
 {
     /// <summary>
     /// Determines what pages should be crawled, whether the raw content should be downloaded and if the links on a page should be crawled
+    /// 用于判断页面是否会被爬行，以及是否获取页面原生内容和抓取页面内的链接
     /// </summary>
     public interface ICrawlDecisionMaker
     {
         /// <summary>
         /// Decides whether the page should be crawled
+        /// 判断是否爬取页面
         /// </summary>
         CrawlDecision ShouldCrawlPage(PageToCrawl pageToCrawl, CrawlContext crawlContext);
 
         /// <summary>
         /// Decides whether the page's links should be crawled
+        /// 判断页面内的链接是否需要被爬行
         /// </summary>
         CrawlDecision ShouldCrawlPageLinks(CrawledPage crawledPage, CrawlContext crawlContext);
 
         /// <summary>
         /// Decides whether the page's content should be dowloaded
+        /// 判断页面的内容是否需要被下载
         /// </summary>
         CrawlDecision ShouldDownloadPageContent(CrawledPage crawledPage, CrawlContext crawlContext);
 
         /// <summary>
         /// Decides whether the page should be re-crawled
+        /// 判断页面是否需要被重新爬取
         /// </summary>
         CrawlDecision ShouldRecrawlPage(CrawledPage crawledPage, CrawlContext crawlContext);
     }
-
+    /// <summary>
+    /// 用于判断页面是否会被爬行，以及是否获取页面原生内容和抓取页面内的链接
+    /// </summary>
     [Serializable]
     public class CrawlDecisionMaker : ICrawlDecisionMaker
     {
+        /// <summary>
+        /// 判断页面是否爬取页面
+        /// </summary>
+        /// <param name="pageToCrawl"></param>
+        /// <param name="crawlContext"></param>
+        /// <returns></returns>
         public virtual CrawlDecision ShouldCrawlPage(PageToCrawl pageToCrawl, CrawlContext crawlContext)
         {
             if(pageToCrawl == null)
@@ -75,7 +88,12 @@ namespace Abot.Core
 
             return new CrawlDecision { Allow = true };
         }
-
+        /// <summary>
+        /// 判断页面内的链接是否需要被爬行
+        /// </summary>
+        /// <param name="crawledPage"></param>
+        /// <param name="crawlContext"></param>
+        /// <returns></returns>
         public virtual CrawlDecision ShouldCrawlPageLinks(CrawledPage crawledPage, CrawlContext crawlContext)
         {
             if (crawledPage == null)
@@ -95,7 +113,12 @@ namespace Abot.Core
 
             return new CrawlDecision{Allow = true};
         }
-
+        /// <summary>
+        /// 判断页面的内容是否需要被下载
+        /// </summary>
+        /// <param name="crawledPage"></param>
+        /// <param name="crawlContext"></param>
+        /// <returns></returns>
         public virtual CrawlDecision ShouldDownloadPageContent(CrawledPage crawledPage, CrawlContext crawlContext)
         {
             if (crawledPage == null)
@@ -134,7 +157,12 @@ namespace Abot.Core
 
             return new CrawlDecision { Allow = true };            
         }
-
+        /// <summary>
+        /// 判断页面是否需要被重新爬取
+        /// </summary>
+        /// <param name="crawledPage"></param>
+        /// <param name="crawlContext"></param>
+        /// <returns></returns>
         public virtual CrawlDecision ShouldRecrawlPage(CrawledPage crawledPage, CrawlContext crawlContext)
         {
             if (crawledPage == null)

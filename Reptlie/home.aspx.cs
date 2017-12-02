@@ -29,11 +29,12 @@ public partial class home : System.Web.UI.Page
         config.IsRespectRobotsDotTextEnabled = false;
         config.IsUriRecrawlingEnabled = false;
         //System.Environment.ProcessorCount：获取当前计算机上的处理器数。
-        config.MaxConcurrentThreads = System.Environment.ProcessorCount;
+        //config.MaxConcurrentThreads = System.Environment.ProcessorCount;
+        config.MaxConcurrentThreads = 1;
         config.MaxPagesToCrawl = 1000;
         config.MaxPagesToCrawlPerDomain = 0;
         config.MinCrawlDelayPerDomainMilliSeconds = 1000;
-
+        //调用WebCrawler
         var crawler = new PoliteWebCrawler(config, null, null, null, null, null, null, null, null);
 
         crawler.ShouldCrawlPage(ShouldCrawlPage);

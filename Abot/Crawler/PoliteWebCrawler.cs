@@ -34,17 +34,33 @@ namespace Abot.Crawler
         protected IDomainRateLimiter _domainRateLimiter;
         protected IRobotsDotTextFinder _robotsDotTextFinder;
         protected IRobotsDotText _robotsDotText;
-
+        /// <summary>
+        /// 
+        /// </summary>
         public PoliteWebCrawler()
             : this(null, null, null, null, null, null, null, null, null)
         {
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="crawlConfiguration"></param>
         public PoliteWebCrawler(CrawlConfiguration crawlConfiguration)
             : this(crawlConfiguration, null, null, null, null, null, null, null, null)
         {
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="crawlConfiguration"></param>
+        /// <param name="crawlDecisionMaker"></param>
+        /// <param name="threadManager"></param>
+        /// <param name="scheduler"></param>
+        /// <param name="pageRequester"></param>
+        /// <param name="hyperLinkParser"></param>
+        /// <param name="memoryManager"></param>
+        /// <param name="domainRateLimiter"></param>
+        /// <param name="robotsDotTextFinder"></param>
         public PoliteWebCrawler(
             CrawlConfiguration crawlConfiguration,
             ICrawlDecisionMaker crawlDecisionMaker,
@@ -60,7 +76,12 @@ namespace Abot.Crawler
             _domainRateLimiter = domainRateLimiter ?? new DomainRateLimiter(_crawlContext.CrawlConfiguration.MinCrawlDelayPerDomainMilliSeconds);
             _robotsDotTextFinder = robotsDotTextFinder ?? new RobotsDotTextFinder(new PageRequester(_crawlContext.CrawlConfiguration));
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="uri"></param>
+        /// <param name="cancellationTokenSource"></param>
+        /// <returns></returns>
         public override CrawlResult Crawl(Uri uri, CancellationTokenSource cancellationTokenSource)
         {
             int robotsDotTextCrawlDelayInSecs = 0;

@@ -111,19 +111,43 @@ namespace Abot.Crawler
     public abstract class WebCrawler : IWebCrawler
     {
         static ILog _logger = LogManager.GetLogger("AbotLogger");
+        /// <summary>
+        /// 
+        /// </summary>
         protected bool _crawlComplete = false;
         protected bool _crawlStopReported = false;
+        /// <summary>
+        /// 
+        /// </summary>
         protected bool _crawlCancellationReported = false;
+        /// <summary>
+        /// 
+        /// </summary>
         protected bool _maxPagesToCrawlLimitReachedOrScheduled = false;
         protected Timer _timeoutTimer;
         protected CrawlResult _crawlResult = null;
         protected CrawlContext _crawlContext;
         protected IThreadManager _threadManager;
+        /// <summary>
+        /// 等待被获取爬行的URI管理器
+        /// </summary>
         protected IScheduler _scheduler;
+        /// <summary>
+        /// 页面请求基类
+        /// </summary>
         protected IPageRequester _pageRequester;
+        /// <summary>
+        /// 用于处理爬取业内的URI地址
+        /// </summary>
         protected IHyperLinkParser _hyperLinkParser;
+        /// <summary>
+        ///  用于判断页面是否会被爬行，以及是否获取页面原生内容和抓取页面内的链接
+        /// </summary>
         protected ICrawlDecisionMaker _crawlDecisionMaker;
         protected IMemoryManager _memoryManager;
+        /// <summary>
+        /// 自定义函数，用来判断是否需要爬行网页
+        /// </summary>
         protected Func<PageToCrawl, CrawlContext, CrawlDecision> _shouldCrawlPageDecisionMaker;
         protected Func<CrawledPage, CrawlContext, CrawlDecision> _shouldDownloadPageContentDecisionMaker;
         protected Func<CrawledPage, CrawlContext, CrawlDecision> _shouldCrawlPageLinksDecisionMaker;
@@ -168,7 +192,13 @@ namespace Abot.Crawler
             : this(null, null, null, null, null, null, null)
         {
         }
-
+        /// <summary>
+        /// Creates a crawler instance with the default settings and implementations.
+        /// </summary>
+        public WebCrawler(CrawlConfiguration crawlConfiguration)
+            : this(crawlConfiguration, null, null, null, null, null, null)
+        {
+        }
         /// <summary>
         /// Creates a crawler instance with custom settings or implementation. Passing in null for all params is the equivalent of the empty constructor.
         /// </summary>
@@ -210,7 +240,7 @@ namespace Abot.Crawler
 
         /// <summary>
         /// Begins a synchronous crawl using the uri param, subscribe to events to process data as it becomes available
-        /// 根据URI开始抓取，并且在数据符合规则时调用自定义的处理函数
+        /// 根据URI开始抓取，并且在数据符合规则时调用自定义的处理函数：
         /// </summary>
         public virtual CrawlResult Crawl(Uri uri)
         {
@@ -219,7 +249,19 @@ namespace Abot.Crawler
 
         /// <summary>
         /// Begins a synchronous crawl using the uri param, subscribe to events to process data as it becomes available
-        /// 根据URI开始抓取，并且在数据符合规则时调用自定义的处理函数
+        /// 根据URI开始抓取，并且在数据符合规则时调用自定义的处理函       
+        /// 整体调用流程如下：
+        /// 1：构建一个CrawlResult类，用于存储爬行抓取的结果
+        /// 2：调用ShouldSchedulePageLink判断链接是否需要添加进爬行URI队列
+        ///     2.1根据被爬行页面的信息判断是否需要被爬行，判断步骤如下
+        ///         1：调用_crawlDecisionMaker（ICrawlDecisionMaker）的ShouldCrawlPage来判断是否爬取页面
+        ///         2：调用_shouldCrawlPageDecisionMaker自定义扩展接口，判断是否爬取页面
+        ///         3：如果不允许
+        ///             3.1：调用FirePageCrawlDisallowedEventAsync()，运行自定义接口
+        ///             3.2：调用FirePageCrawlDisallowedEvent 
+        ///         4：调用SignalCrawlStopIfNeeded
+        ///         5：返回
+        /// 3：调用 VerifyRequiredAvailableMemory 处理内存相关
         /// </summary>
         public virtual CrawlResult Crawl(Uri uri, CancellationTokenSource cancellationTokenSource)
         {
@@ -230,7 +272,7 @@ namespace Abot.Crawler
 
             if (cancellationTokenSource != null)
                 _crawlContext.CancellationTokenSource = cancellationTokenSource;
-            //爬取结果类
+            //1、构建一个CrawlResult类，用于存储爬行抓取的结果
             _crawlResult = new CrawlResult();
             _crawlResult.RootUri = _crawlContext.RootUri;
             _crawlResult.CrawlContext = _crawlContext;
@@ -240,9 +282,10 @@ namespace Abot.Crawler
             _logger.InfoFormat("About to crawl site [{0}]", uri.AbsoluteUri);
             //打印配置项
             PrintConfigValues(_crawlContext.CrawlConfiguration);
-
+            //内存管理
             if (_memoryManager != null)
             {
+                //运行前获取内存使用情况
                 _crawlContext.MemoryUsageBeforeCrawlInMb = _memoryManager.GetCurrentUsageInMb();
                 _logger.InfoFormat("Starting memory usage for site [{0}] is [{1}mb]", uri.AbsoluteUri, _crawlContext.MemoryUsageBeforeCrawlInMb);
             }
@@ -259,8 +302,13 @@ namespace Abot.Crawler
 
             try
             {
-                PageToCrawl rootPage = new PageToCrawl(uri) { ParentUri = uri, IsInternal = true, IsRoot = true };
-                //判断链接是否需要爬行
+                //初始化被爬行的跟页面的数据
+                PageToCrawl rootPage = new PageToCrawl(uri) {
+                    ParentUri = uri,
+                    IsInternal = true,
+                    IsRoot = true
+                };
+                //
                 if (ShouldSchedulePageLink(rootPage))
                     _scheduler.Add(rootPage);
 
@@ -318,7 +366,10 @@ namespace Abot.Crawler
         /// Synchronous event that is fired when the ICrawlDecisionMaker.ShouldCrawlLinks impl returned false. This means the page's links were not crawled.
         /// </summary>
         public event EventHandler<PageLinksCrawlDisallowedArgs> PageLinksCrawlDisallowed;
-
+        /// <summary>
+        /// 页面开始爬行的前时间
+        /// </summary>
+        /// <param name="pageToCrawl"></param>
         protected virtual void FirePageCrawlStartingEvent(PageToCrawl pageToCrawl)
         {
             try
@@ -348,7 +399,11 @@ namespace Abot.Crawler
                 _logger.Error(e);
             }
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="pageToCrawl"></param>
+        /// <param name="reason"></param>
         protected virtual void FirePageCrawlDisallowedEvent(PageToCrawl pageToCrawl, string reason)
         {
             try
@@ -398,7 +453,7 @@ namespace Abot.Crawler
         /// <summary>
         /// Asynchronous event that is fired when the ICrawlDecisionMaker.ShouldCrawl impl returned false. This means the page or its links were not crawled.
         /// 当 ICrawlDecisionMaker.ShouldCrawl 属性为false时被执行
-        /// 
+        /// 自定义ICrawlDecisionMaker决定不再爬取的方法事件
         /// </summary>
         public event EventHandler<PageCrawlDisallowedArgs> PageCrawlDisallowedAsync;
 
@@ -407,7 +462,10 @@ namespace Abot.Crawler
         /// 当 ICrawlDecisionMaker.ShouldCrawl 属性为false时被执行
         /// </summary>
         public event EventHandler<PageLinksCrawlDisallowedArgs> PageLinksCrawlDisallowedAsync;
-
+        /// <summary>
+        /// 调用页面开始爬取前的自定义接口
+        /// </summary>
+        /// <param name="pageToCrawl"></param>
         protected virtual void FirePageCrawlStartingEventAsync(PageToCrawl pageToCrawl)
         {
             EventHandler<PageCrawlStartingArgs> threadSafeEvent = PageCrawlStartingAsync;
@@ -450,7 +508,11 @@ namespace Abot.Crawler
                 }
             }
         }
-
+        /// <summary>
+        /// ？？
+        /// </summary>
+        /// <param name="pageToCrawl"></param>
+        /// <param name="reason"></param>
         protected virtual void FirePageCrawlDisallowedEventAsync(PageToCrawl pageToCrawl, string reason)
         {
             EventHandler<PageCrawlDisallowedArgs> threadSafeEvent = PageCrawlDisallowedAsync;
@@ -496,7 +558,7 @@ namespace Abot.Crawler
         /// Synchronous method that registers a delegate to be called to determine whether the page's content should be dowloaded
         /// 自定义处理函数，用来决定一个页面是否被下载爬行
         /// </summary>
-        /// <param name="shouldDownloadPageContent"></param>
+        /// <param name="decisionMaker"></param>
         public void ShouldDownloadPageContent(Func<CrawledPage, CrawlContext, CrawlDecision> decisionMaker)
         {
             _shouldDownloadPageContentDecisionMaker = decisionMaker;
@@ -547,9 +609,13 @@ namespace Abot.Crawler
             _logger.DebugFormat("abot config section was found");
             return configFromFile.Convert();
         }
-
+        /// <summary>
+        /// 爬取站点，操作步骤如下：
+        /// 1：
+        /// </summary>
         protected virtual void CrawlSite()
         {
+            //是否爬取完毕
             while (!_crawlComplete)
             {
                 //爬行前检查
@@ -559,18 +625,24 @@ namespace Abot.Crawler
                 {
                     _threadManager.DoWork(() => ProcessPage(_scheduler.GetNext()));
                 }
+                //如果没有在运行的线程，且待爬取的页面为0
                 else if (!_threadManager.HasRunningThreads())
                 {
                     _crawlComplete = true;
                 }
                 else
                 {
+                    //如果待爬取的链接为零但还有在运行的线程，则等待2.5秒后继续循环
                     _logger.DebugFormat("Waiting for links to be scheduled...");
                     Thread.Sleep(2500);
                 }
+                //临时处理每隔10秒开始一个线程
+                Thread.Sleep(2500);
             }
         }
-
+        /// <summary>
+        /// 验证占用内存是否超出规定大小
+        /// </summary>
         protected virtual void VerifyRequiredAvailableMemory()
         {
             if (_crawlContext.CrawlConfiguration.MinAvailableMemoryRequiredInMb < 1)
@@ -579,7 +651,13 @@ namespace Abot.Crawler
             if (!_memoryManager.IsSpaceAvailable(_crawlContext.CrawlConfiguration.MinAvailableMemoryRequiredInMb))
                 throw new InsufficientMemoryException(string.Format("Process does not have the configured [{0}mb] of available memory to crawl site [{1}]. This is configurable through the minAvailableMemoryRequiredInMb in app.conf or CrawlConfiguration.MinAvailableMemoryRequiredInMb.", _crawlContext.CrawlConfiguration.MinAvailableMemoryRequiredInMb, _crawlContext.RootUri));
         }
-
+        /// <summary>
+        /// 爬取前检查 通过1、2 步判断是否需要中断爬取，3、4步执行
+        /// 1：CheckMemoryUsage  
+        /// 2：CheckForCancellationRequest
+        /// 3：CheckForHardStopRequest  强制中断爬取 
+        /// 4：CheckForStopRequest  中断爬取
+        /// </summary>
         protected virtual void RunPreWorkChecks()
         {
             CheckMemoryUsage();
@@ -587,7 +665,9 @@ namespace Abot.Crawler
             CheckForHardStopRequest();
             CheckForStopRequest();
         }
-
+        /// <summary>
+        /// 检查内存使用情况
+        /// </summary>
         protected virtual void CheckMemoryUsage()
         {
             if (_memoryManager == null
@@ -611,7 +691,9 @@ namespace Abot.Crawler
                 _crawlContext.IsCrawlHardStopRequested = true;
             }
         }
-
+        /// <summary>
+        /// CancellationTokenSource：
+        /// </summary>
         protected virtual void CheckForCancellationRequest()
         {
             if (_crawlContext.CancellationTokenSource.IsCancellationRequested)
@@ -626,7 +708,9 @@ namespace Abot.Crawler
                 }
             }
         }
-
+        /// <summary>
+        /// 强制停止
+        /// </summary>
         protected virtual void CheckForHardStopRequest()
         {
             if (_crawlContext.IsCrawlHardStopRequested)
@@ -652,7 +736,9 @@ namespace Abot.Crawler
                 PageLinksCrawlDisallowedAsync = null;
             }
         }
-
+        /// <summary>
+        /// 停止
+        /// </summary>
         protected virtual void CheckForStopRequest()
         {
             if (_crawlContext.IsCrawlStopRequested)
@@ -677,43 +763,51 @@ namespace Abot.Crawler
         }
 
         //protected virtual async Task ProcessPage(PageToCrawl pageToCrawl)
+        /// <summary>
+        /// 爬取处理
+        /// 1：ThrowIfCancellationRequested 检查是否需要取消Task并抛出异常
+        /// </summary>
+        /// <param name="pageToCrawl"></param>
         protected virtual void ProcessPage(PageToCrawl pageToCrawl)
         {
             try
             {
                 if (pageToCrawl == null)
                     return;
-
+                //检查是否需要取消Task并抛出异常
                 ThrowIfCancellationRequested();
-
+                //暂时不知道干嘛的
                 AddPageToContext(pageToCrawl);
 
                 //CrawledPage crawledPage = await CrawlThePage(pageToCrawl);
+                //爬取页面
                 CrawledPage crawledPage = CrawlThePage(pageToCrawl);
 
                 // Validate the root uri in case of a redirection.
+                //判断是否重定向
                 if (crawledPage.IsRoot)
                     ValidateRootUriForRedirection(crawledPage);
-
+                //如果是重定向，则处理
                 if (IsRedirect(crawledPage) && !_crawlContext.CrawlConfiguration.IsHttpRequestAutoRedirectsEnabled)
                     ProcessRedirect(crawledPage);
-                
+                //判断页面大小是否超出限制
                 if (PageSizeIsAboveMax(crawledPage))
                     return;
-
+                //
                 ThrowIfCancellationRequested();
 
                 bool shouldCrawlPageLinks = ShouldCrawlPageLinks(crawledPage);
+                //爬取页面内的URI地址
                 if (shouldCrawlPageLinks || _crawlContext.CrawlConfiguration.IsForcedLinkParsingEnabled)
                     ParsePageLinks(crawledPage);
 
                 ThrowIfCancellationRequested();
-
+                //将页面内获取的地址存放至待爬取队列
                 if (shouldCrawlPageLinks)
                     SchedulePageLinks(crawledPage);
 
                 ThrowIfCancellationRequested();
-
+                //调用自定义爬取完成接口
                 FirePageCrawlCompletedEventAsync(crawledPage);
                 FirePageCrawlCompletedEvent(crawledPage);
 
@@ -737,7 +831,10 @@ namespace Abot.Crawler
                 _crawlContext.IsCrawlHardStopRequested = true;
             }
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="crawledPage"></param>
         protected virtual void ProcessRedirect(CrawledPage crawledPage)
         {
             if (crawledPage.RedirectPosition >= 20)
@@ -786,13 +883,19 @@ namespace Abot.Crawler
             }
             return isRedirect;
         }
-
+        /// <summary>
+        /// 检查是否需要取消Task并抛出异常
+        /// </summary>
         protected virtual void ThrowIfCancellationRequested()
         {
             if (_crawlContext.CancellationTokenSource != null && _crawlContext.CancellationTokenSource.IsCancellationRequested)
                 _crawlContext.CancellationTokenSource.Token.ThrowIfCancellationRequested();
         }
-
+        /// <summary>
+        /// 页面大小是否超出大小
+        /// </summary>
+        /// <param name="crawledPage"></param>
+        /// <returns></returns>
         protected virtual bool PageSizeIsAboveMax(CrawledPage crawledPage)
         {
             bool isAboveMax = false;
@@ -822,12 +925,23 @@ namespace Abot.Crawler
             SignalCrawlStopIfNeeded(shouldCrawlPageLinksDecision);
             return shouldCrawlPageLinksDecision.Allow;
         }
-
+        /// <summary>
+        /// 根据被爬行页面的信息判断是否需要被爬行，判断步骤如下
+        /// 1：调用_crawlDecisionMaker（ICrawlDecisionMaker）的ShouldCrawlPage来判断是否爬取页面
+        /// 2：调用_shouldCrawlPageDecisionMaker自定义扩展接口，判断是否爬取页面
+        /// 3：如果不允许
+        ///     3.1：调用FirePageCrawlDisallowedEventAsync()，运行自定义接口
+        ///     3.2：调用FirePageCrawlDisallowedEvent 
+        /// 4：调用SignalCrawlStopIfNeeded
+        /// 5：返回
+        /// </summary>
+        /// <param name="pageToCrawl">被爬行页面的信息</param>
+        /// <returns></returns>
         protected virtual bool ShouldCrawlPage(PageToCrawl pageToCrawl)
         {
+
             if (_maxPagesToCrawlLimitReachedOrScheduled)
                 return false;
-
             CrawlDecision shouldCrawlPageDecision = _crawlDecisionMaker.ShouldCrawlPage(pageToCrawl, _crawlContext);
             if (!shouldCrawlPageDecision.Allow &&
                 shouldCrawlPageDecision.Reason.Contains("MaxPagesToCrawl limit of"))
@@ -892,16 +1006,27 @@ namespace Abot.Crawler
         }
 
         //protected virtual async Task<CrawledPage> CrawlThePage(PageToCrawl pageToCrawl)
+        /// <summary>
+        /// 爬取页面
+        /// </summary>
+        /// <param name="pageToCrawl"></param>
+        /// <returns></returns>
         protected virtual CrawledPage CrawlThePage(PageToCrawl pageToCrawl)
         {
             _logger.DebugFormat("About to crawl page [{0}]", pageToCrawl.Uri.AbsoluteUri);
+            //调取页面开始爬行前的自定义响应时间
             FirePageCrawlStartingEventAsync(pageToCrawl);
+            //取页面开始爬行前事件
             FirePageCrawlStartingEvent(pageToCrawl);
-
-            if (pageToCrawl.IsRetry){ WaitMinimumRetryDelay(pageToCrawl); }
+            //站点是否被多次爬取
+            if (pageToCrawl.IsRetry){
+                //线程休眠。
+                WaitMinimumRetryDelay(pageToCrawl);
+            }
             
             pageToCrawl.LastRequest = DateTime.Now;
-
+            //发送http请求获取页面
+            //ShouldDownloadPageContent  自定义接口，用于判断页面是否需要被下载
             CrawledPage crawledPage = _pageRequester.MakeRequest(pageToCrawl.Uri, ShouldDownloadPageContent);
             //CrawledPage crawledPage = await _pageRequester.MakeRequestAsync(pageToCrawl.Uri, ShouldDownloadPageContent);
 
@@ -914,7 +1039,11 @@ namespace Abot.Crawler
 
             return crawledPage;
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="src"></param>
+        /// <param name="dest"></param>
         protected void Map(PageToCrawl src, CrawledPage dest)
         {
             dest.Uri = src.Uri;
@@ -930,19 +1059,29 @@ namespace Abot.Crawler
             dest.RedirectedFrom = src.RedirectedFrom;
             dest.RedirectPosition = src.RedirectPosition;
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="pageToCrawlBag"></param>
+        /// <param name="crawledPageBag"></param>
+        /// <returns></returns>
         protected virtual dynamic CombinePageBags(dynamic pageToCrawlBag, dynamic crawledPageBag)
         {
             IDictionary<string, object> combinedBag = new ExpandoObject();
             var pageToCrawlBagDict = pageToCrawlBag as IDictionary<string, object>;
             var crawledPageBagDict = crawledPageBag as IDictionary<string, object>;
 
-            foreach (KeyValuePair<string, object> entry in pageToCrawlBagDict) combinedBag[entry.Key] = entry.Value;
-            foreach (KeyValuePair<string, object> entry in crawledPageBagDict) combinedBag[entry.Key] = entry.Value;
+            foreach (KeyValuePair<string, object> entry in pageToCrawlBagDict)
+                combinedBag[entry.Key] = entry.Value;
+            foreach (KeyValuePair<string, object> entry in crawledPageBagDict)
+                combinedBag[entry.Key] = entry.Value;
 
             return combinedBag;
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="pageToCrawl"></param>
         protected virtual void AddPageToContext(PageToCrawl pageToCrawl)
         {
             if (pageToCrawl.IsRetry)
@@ -955,12 +1094,18 @@ namespace Abot.Crawler
             Interlocked.Increment(ref _crawlContext.CrawledCount);
             _crawlContext.CrawlCountByDomain.AddOrUpdate(pageToCrawl.Uri.Authority, 1, (key, oldValue) => oldValue + 1);
         }
-
+        /// <summary>
+        /// 爬取页面内的URI地址
+        /// </summary>
+        /// <param name="crawledPage"></param>
         protected virtual void ParsePageLinks(CrawledPage crawledPage)
         {
             crawledPage.ParsedLinks = _hyperLinkParser.GetLinks(crawledPage);
         }
-
+        /// <summary>
+        /// 将从页面内爬出来的URI加入到待爬取的队列_scheduler
+        /// </summary>
+        /// <param name="crawledPage"></param>
         protected virtual void SchedulePageLinks(CrawledPage crawledPage)
         {
             int linksToCrawl = 0;
@@ -998,7 +1143,13 @@ namespace Abot.Crawler
                 _scheduler.AddKnownUri(uri);
             }
         }
-
+        /// <summary>
+        /// 判断URI是否可以被添加到等待获取的链接：判断条件
+        /// (page.IsInternal || _crawlContext.CrawlConfiguration.IsExternalPageCrawlingEnabled):是否为站内页面或者是否允许爬行站外节点
+        /// 调用 ShouldCrawlPage  函数
+        /// </summary>
+        /// <param name="page"></param>
+        /// <returns></returns>
         protected virtual bool ShouldSchedulePageLink(PageToCrawl page)
         {
             if ((page.IsInternal || _crawlContext.CrawlConfiguration.IsExternalPageCrawlingEnabled) && (ShouldCrawlPage(page)))
@@ -1011,7 +1162,11 @@ namespace Abot.Crawler
         {
             return _crawlContext.CrawlConfiguration.MaxLinksPerPage == 0 || _crawlContext.CrawlConfiguration.MaxLinksPerPage > linksAdded;
         }
-
+        /// <summary>
+        /// 是否需要下载页面内容
+        /// </summary>
+        /// <param name="crawledPage"></param>
+        /// <returns></returns>
         protected virtual CrawlDecision ShouldDownloadPageContent(CrawledPage crawledPage)
         {
             CrawlDecision decision = _crawlDecisionMaker.ShouldDownloadPageContent(crawledPage, _crawlContext);
@@ -1040,7 +1195,10 @@ namespace Abot.Crawler
                 _logger.InfoFormat("{0}{1}: {2}", indentString, key, config.ConfigurationExtensions[key]);
             }
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="decision"></param>
         protected virtual void SignalCrawlStopIfNeeded(CrawlDecision decision)
         {
             if (decision.ShouldHardStopCrawl)
@@ -1054,7 +1212,10 @@ namespace Abot.Crawler
                 _crawlContext.IsCrawlStopRequested = decision.ShouldStopCrawl;
             }
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="pageToCrawl"></param>
         protected virtual void WaitMinimumRetryDelay(PageToCrawl pageToCrawl)
         {
             //TODO No unit tests cover these lines

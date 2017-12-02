@@ -6,6 +6,7 @@ namespace Abot.Util
 {
     /// <summary>
     /// Handles memory monitoring/usage
+    /// 处理内存监控和使用
     /// </summary>
     public interface IMemoryManager : IMemoryMonitor, IDisposable
     {
@@ -38,7 +39,11 @@ namespace Abot.Util
         {
             return GetCurrentUsageInMb() > sizeInMb;
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sizeInMb"></param>
+        /// <returns></returns>
         public virtual bool IsSpaceAvailable(int sizeInMb)
         {
             if (sizeInMb < 1)
@@ -67,12 +72,17 @@ namespace Abot.Util
 
             return isAvailable;
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public virtual int GetCurrentUsageInMb()
         {
             return _memoryMonitor.GetCurrentUsageInMb();
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
         public void Dispose()
         {
             _memoryMonitor.Dispose();

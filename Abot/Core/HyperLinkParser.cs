@@ -9,6 +9,7 @@ namespace Abot.Core
 {
     /// <summary>
     /// Handles parsing hyperlinks out of the raw html
+    /// 爬取页面内的URI地址类
     /// </summary>
     public interface IHyperLinkParser
     {

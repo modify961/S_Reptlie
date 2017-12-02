@@ -10,15 +10,20 @@ using log4net.Core;
 
 namespace Abot.Core
 {
+    /// <summary>
+    /// 页面请求处理接口
+    /// </summary>
     public interface IPageRequester : IDisposable
     {
         /// <summary>
         /// Make an http web request to the url and download its content
+        /// 发送一个请求，并下载页面内容
         /// </summary>
         CrawledPage MakeRequest(Uri uri);
 
         /// <summary>
         /// Make an http web request to the url and download its content based on the param func decision
+        /// 根据自定义处理函数来下载制定的内容
         /// </summary>
         CrawledPage MakeRequest(Uri uri, Func<CrawledPage, CrawlDecision> shouldDownloadContent);
 
@@ -36,13 +41,20 @@ namespace Abot.Core
         protected CrawlConfiguration _config;
         protected IWebContentExtractor _extractor;
         protected CookieContainer _cookieContainer = new CookieContainer();
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="config"></param>
         public PageRequester(CrawlConfiguration config)
             : this(config, null)
         {
 
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="config"></param>
+        /// <param name="contentExtractor"></param>
         public PageRequester(CrawlConfiguration config, IWebContentExtractor contentExtractor)
         {
             if (config == null)

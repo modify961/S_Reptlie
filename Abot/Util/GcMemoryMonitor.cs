@@ -4,16 +4,28 @@ using System.Diagnostics;
 
 namespace Abot.Util
 {
+    /// <summary>
+    /// 内存使用检测接口
+    /// </summary>
     public interface IMemoryMonitor : IDisposable
     {
+        /// <summary>
+        /// 获取当前内存使用情况（单位：MB）
+        /// </summary>
+        /// <returns></returns>
         int GetCurrentUsageInMb();
     }
-
+    /// <summary>
+    /// 内存使用检测
+    /// </summary>
     [Serializable]
     public class GcMemoryMonitor : IMemoryMonitor
     {
         static ILog _logger = LogManager.GetLogger("AbotLogger");
-
+        /// <summary>
+        /// 获取当前内存使用情况（单位：MB）
+        /// </summary>
+        /// <returns></returns>
         public virtual int GetCurrentUsageInMb()
         {
             Stopwatch timer = Stopwatch.StartNew();
@@ -24,7 +36,9 @@ namespace Abot.Util
 
             return currentUsageInMb;       
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
         public void Dispose()
         {
             //do nothing
