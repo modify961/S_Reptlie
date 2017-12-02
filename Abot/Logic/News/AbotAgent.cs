@@ -5,6 +5,7 @@ using System.Text;
 using Abot.Crawler;
 using Abot.Poco;
 using System.Text.RegularExpressions;
+using AngleSharp.Dom;
 
 namespace Abot.Logic.News
 {
@@ -68,11 +69,42 @@ namespace Abot.Logic.News
         {
             if (_pageurlregex.IsMatch(e.CrawledPage.Uri.AbsoluteUri))
             {
-                var table = e.CrawledPage.CsQueryDocument.Select("#ip_list");
-                var linkDom = table.Select(".odd");
-                foreach(var cq in linkDom){
-                    var str = (e.CrawledPage.Uri.AbsoluteUri + "\t" + cq.InnerHTML + "\r\n");
-                    System.IO.File.AppendAllText("D:\\fake.txt", str);
+                var table = e.CrawledPage.AngleSharpHtmlDocument.QuerySelector("#ip_list");
+                var linkDom = table.QuerySelectorAll(".odd");
+                StringBuilder stringBuilder = new StringBuilder();
+                String date = "";
+                foreach (var cq in linkDom){
+                    IHtmlCollection <IElement> nodeList = cq.QuerySelectorAll("td");
+                    if (nodeList.Length > 9) {
+                        stringBuilder.Clear();
+                        date = "";
+                        stringBuilder.Append(nodeList[1].TextContent);
+                        stringBuilder.Append(",");
+                        stringBuilder.Append(nodeList[2].TextContent);
+                        stringBuilder.Append(",");
+                        stringBuilder.Append(nodeList[5].TextContent);
+                        stringBuilder.Append(",");
+                        stringBuilder.Append(nodeList[8].TextContent);
+                        stringBuilder.Append(",");
+                        date= nodeList[8].TextContent;
+                        int dateOfNum = 0;
+                        if (date != null && date.IndexOf("天") != -1)
+                        {
+                            int.TryParse(date.Replace("天", ""), out dateOfNum);
+                            date = (dateOfNum * 24 * 60).ToString();
+                        }
+                        else if (date != null && date.IndexOf("小时") != -1) {
+                            int.TryParse(date.Replace("小时", ""), out dateOfNum);
+                            date = (dateOfNum *  60).ToString();
+                        }
+                        else if (date != null && date.IndexOf("分钟") != -1)
+                        {
+                            date = date.Replace("分钟", "");
+                        }
+                        stringBuilder.Append(date);
+                        System.IO.File.AppendAllText("D:\\fake.txt", stringBuilder.ToString());
+                    }
+                    
                 }
             }
         }

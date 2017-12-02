@@ -32,7 +32,9 @@ namespace Abot.Core
         ///// </summary>
         //Task<CrawledPage> MakeRequestAsync(Uri uri, Func<CrawledPage, CrawlDecision> shouldDownloadContent);
     }
-
+    /// <summary>
+    /// 
+    /// </summary>
     [Serializable]
     public class PageRequester : IPageRequester
     {
@@ -248,7 +250,10 @@ namespace Abot.Core
 
             return request;
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="response"></param>
         protected virtual void ProcessResponseObject(HttpWebResponse response)
         {
             if (response != null && _config.IsSendingCookiesEnabled)
