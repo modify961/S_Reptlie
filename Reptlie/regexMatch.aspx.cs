@@ -15,7 +15,7 @@ public partial class regexMatch : System.Web.UI.Page
 
     protected void Button1_Click(object sender, EventArgs e)
     { 
-        Regex obj = new Regex("^https://news.cnblogs.com/n/\\d+/$", RegexOptions.Compiled);
+        Regex obj = new Regex("^http://www.xicidaili.com/nn/\\d+$", RegexOptions.Compiled);
         if (obj.IsMatch(txt_date.Text))
         {
             Label1.Text = "匹配";

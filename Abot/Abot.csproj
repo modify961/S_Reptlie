@@ -95,7 +95,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\AgentCheck.cs" />
+    <Compile Include="Core\AgentSingleton.cs" />
     <Compile Include="Core\AbotConfigurationSectionHandler.cs" />
+    <Compile Include="Core\Agenter.cs" />
     <Compile Include="Core\BloomFilterCrawledUrlRepository.cs" />
     <Compile Include="Core\CompactCrawledUrlRepository.cs" />
     <Compile Include="Core\AngleSharpHyperLinkParser.cs" />

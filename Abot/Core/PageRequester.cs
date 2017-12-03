@@ -96,6 +96,29 @@ namespace Abot.Core
             HttpWebResponse response = null;
             try
             {
+                /******************
+                 * 使用代理IP
+                 * ****************/
+                Agenter agenter = AgentSingleton.getInstance.get();
+                bool usable = agenter == null ? false : true;
+                int agentNum = 0;
+                while (usable) {
+                    if (!AgentCheck.agentCheck(agenter))
+                    {
+                        AgentSingleton.getInstance.delete(agenter);
+                        agenter = AgentSingleton.getInstance.get();
+                        agentNum++;
+                    }
+                    else
+                        usable = false;
+                    if (agentNum > 5)
+                        break;
+                }
+                if (!usable&& agenter!=null) {
+                    WebProxy proxy = new WebProxy(agenter.ip, agenter.port);
+                    request.Proxy = proxy;
+                }
+                /*****************代理结束***********************/
                 request = BuildRequestObject(uri);
                 crawledPage.RequestStarted = DateTime.Now;
                 response = (HttpWebResponse)request.GetResponse();

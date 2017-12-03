@@ -150,6 +150,9 @@ namespace Abot.Crawler
         /// </summary>
         protected Func<PageToCrawl, CrawlContext, CrawlDecision> _shouldCrawlPageDecisionMaker;
         protected Func<CrawledPage, CrawlContext, CrawlDecision> _shouldDownloadPageContentDecisionMaker;
+        /// <summary>
+        /// 
+        /// </summary>
         protected Func<CrawledPage, CrawlContext, CrawlDecision> _shouldCrawlPageLinksDecisionMaker;
         protected Func<CrawledPage, CrawlContext, CrawlDecision> _shouldRecrawlPageDecisionMaker;
         protected Func<Uri, CrawledPage, CrawlContext, bool> _shouldScheduleLinkDecisionMaker;
@@ -566,7 +569,7 @@ namespace Abot.Crawler
 
         /// <summary>
         /// Synchronous method that registers a delegate to be called to determine whether a page's links should be crawled or not
-        /// 自定义处理函数，用来决定一个页面链接是否被爬行
+        /// 自定义处理函数，用来是否要将页面内的link爬取出来
         /// </summary>
         /// <param name="shouldCrawlPageLinksDelegate"></param>
         public void ShouldCrawlPageLinks(Func<CrawledPage, CrawlContext, CrawlDecision> decisionMaker)
@@ -772,6 +775,7 @@ namespace Abot.Crawler
         {
             try
             {
+                System.IO.File.AppendAllText("D:\\url.txt", pageToCrawl.Uri.AbsoluteUri + "\r\n");
                 if (pageToCrawl == null)
                     return;
                 //检查是否需要取消Task并抛出异常
@@ -908,7 +912,11 @@ namespace Abot.Crawler
             }
             return isAboveMax;
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="crawledPage"></param>
+        /// <returns></returns>
         protected virtual bool ShouldCrawlPageLinks(CrawledPage crawledPage)
         {
             CrawlDecision shouldCrawlPageLinksDecision = _crawlDecisionMaker.ShouldCrawlPageLinks(crawledPage, _crawlContext);
