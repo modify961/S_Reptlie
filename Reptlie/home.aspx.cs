@@ -34,6 +34,7 @@ public partial class home : System.Web.UI.Page
         config.MaxPagesToCrawl = 1000;
         config.MaxPagesToCrawlPerDomain = 0;
         config.MinCrawlDelayPerDomainMilliSeconds = 1000;
+        config.IsHttpRequestAutomaticDecompressionEnabled = true;
         //调用WebCrawler
         var crawler = new PoliteWebCrawler(config, null, null, null, null, null, null, null, null);
 

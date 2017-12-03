@@ -96,6 +96,7 @@ namespace Abot.Core
             HttpWebResponse response = null;
             try
             {
+                request = BuildRequestObject(uri);
                 /******************
                  * 使用代理IP
                  * ****************/
@@ -119,7 +120,7 @@ namespace Abot.Core
                     request.Proxy = proxy;
                 }
                 /*****************代理结束***********************/
-                request = BuildRequestObject(uri);
+                
                 crawledPage.RequestStarted = DateTime.Now;
                 response = (HttpWebResponse)request.GetResponse();
                 ProcessResponseObject(response);
@@ -239,7 +240,11 @@ namespace Abot.Core
         //        return crawledPage;
         //    });
         //}
-
+        /// <summary>
+        /// 配置请求数据
+        /// </summary>
+        /// <param name="uri"></param>
+        /// <returns></returns>
         protected virtual HttpWebRequest BuildRequestObject(Uri uri)
         {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);

@@ -481,7 +481,10 @@ namespace Abot.Crawler
                 }
             }
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="crawledPage"></param>
         protected virtual void FirePageCrawlCompletedEventAsync(CrawledPage crawledPage)
         {
             EventHandler<PageCrawlCompletedArgs> threadSafeEvent = PageCrawlCompletedAsync;

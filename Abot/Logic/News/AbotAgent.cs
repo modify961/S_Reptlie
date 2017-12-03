@@ -151,7 +151,7 @@ namespace Abot.Logic.News
             }
         }
         /// <summary>
-        /// 根据链接判断页面是不是需要爬行
+        /// 判断链接是否需要爬取
         /// </summary>
         /// <param name="crawledPage"></param>
         /// <param name="crawlContext"></param>
