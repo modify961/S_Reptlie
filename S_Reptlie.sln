@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.27004.2009
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Reptlie", "Reptlie\", "{1A02D73B-F28D-40F6-A2C8-A86C105550F7}"
 	ProjectSection(WebsiteProperties) = preProject
-		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.6.1"
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.6"
 		ProjectReferences = "{0cdcd537-4b0e-4514-966f-f425cdc92ba4}|Abot.dll;"
 		Debug.AspNetCompiler.VirtualPath = "/localhost_49459"
 		Debug.AspNetCompiler.PhysicalPath = "Reptlie\"
@@ -28,6 +28,12 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Reptlie", "Reptlie\", "{1A0
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Abot", "Abot\Abot.csproj", "{0CDCD537-4B0E-4514-966F-F425CDC92BA4}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DbHelper", "DbHelper", "{0B855EE8-B3C8-4608-BDCC-A2D2E1CB7322}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MongoDbHelper", "DbHelper\MongoDbHelper\MongoDbHelper.csproj", "{05F03C9B-869A-4B41-B35E-2C9F03AB05DE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RabbitMQHelper", "RabbitMQHelper\RabbitMQHelper.csproj", "{BEE336EE-9D1E-4384-AABD-3F8E7070683F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,9 +48,20 @@ Global
 		{0CDCD537-4B0E-4514-966F-F425CDC92BA4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0CDCD537-4B0E-4514-966F-F425CDC92BA4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0CDCD537-4B0E-4514-966F-F425CDC92BA4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{05F03C9B-869A-4B41-B35E-2C9F03AB05DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{05F03C9B-869A-4B41-B35E-2C9F03AB05DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{05F03C9B-869A-4B41-B35E-2C9F03AB05DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{05F03C9B-869A-4B41-B35E-2C9F03AB05DE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BEE336EE-9D1E-4384-AABD-3F8E7070683F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BEE336EE-9D1E-4384-AABD-3F8E7070683F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BEE336EE-9D1E-4384-AABD-3F8E7070683F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BEE336EE-9D1E-4384-AABD-3F8E7070683F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{05F03C9B-869A-4B41-B35E-2C9F03AB05DE} = {0B855EE8-B3C8-4608-BDCC-A2D2E1CB7322}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {54B420AD-885C-4F6B-9F11-C30B65D71539}
