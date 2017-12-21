@@ -38,7 +38,7 @@ namespace RabbitMQHelper
                          * 
                          * 
                          */
-                        channel.QueueDeclare(queue: "hello",//队列名
+                        channel.QueueDeclare(queue: queueName,//队列名
                                              durable: false,//是否持久化
                                              exclusive: false,//排它性
                                              autoDelete: false,//一旦客户端连接断开则自动删除queue
@@ -49,7 +49,7 @@ namespace RabbitMQHelper
                         IBasicProperties properties = channel.CreateBasicProperties();
                         properties.DeliveryMode = 2;
                         channel.BasicPublish(exchange: "",//exchange名称
-                                             routingKey: "hello",//如果存在exchange,则消息被发送到名称为hello的queue的客户端
+                                             routingKey: queueName,//如果存在exchange,则消息被发送到名称为hello的queue的客户端
                                              basicProperties: properties,
                                              body: body);//消息体
                     }
