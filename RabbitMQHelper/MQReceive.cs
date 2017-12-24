@@ -11,7 +11,11 @@ namespace RabbitMQHelper
     public class MQReceive
     {
         public void Receive() {
-            var factory = new ConnectionFactory() { HostName = "localhost" };
+            var factory = new ConnectionFactory() { HostName = "47.96.146.22" };
+            factory.HostName = "47.96.146.22";
+            factory.UserName = "ljw";
+            factory.Password = "li809731496";
+            factory.Port = 5672;
             using (var connection = factory.CreateConnection())
             using (var channel = connection.CreateModel())
             {

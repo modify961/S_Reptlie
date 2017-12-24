@@ -37,7 +37,7 @@ namespace Abot.Core
         /// <returns></returns>
         public override string ToString()
         {
-            return this.ip + "," + this.port + this.type;
+            return this.ip + "," + this.port+","+ this.type;
         }
     }
 }

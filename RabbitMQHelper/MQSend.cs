@@ -26,7 +26,11 @@ namespace RabbitMQHelper
                 //IConnection:表示一个符合AMQP 0 - 9 - 1协议的连接对象，用户和RabbitMQ 服务端的连接
                 //ConnectionFactory: 可以创建一个IConnection对象的实例。
                 //IBasicConsumer: 表示一个消息的消费者，或者是使用者。
-                var factory = new ConnectionFactory() { HostName = "localhost" };
+                var factory = new ConnectionFactory();
+                factory.HostName = "47.96.146.22";
+                factory.UserName = "ljw";
+                factory.Password = "li809731496";
+                factory.Port = 5672;
                 //创建一个IConnection的类
                 using (var connection = factory.CreateConnection())
                 {

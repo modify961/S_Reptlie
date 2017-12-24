@@ -4,6 +4,7 @@ using AngleSharp.Dom;
 using AngleSharp.Dom.Html;
 using AngleSharp.Parser.Html;
 using HtmlAgilityPack;
+using RabbitMQHelper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,6 +30,8 @@ public partial class requestPage : System.Web.UI.Page
             for (int i = 1; i <= 10; i++)
             {
                 request = BuildRequestObject(new Uri(@"http://www.xicidaili.com/nn/" + i.ToString()));
+                WebProxy proxy = new WebProxy("113.122.14.225", 808);
+                request.Proxy = proxy;
                 response = (HttpWebResponse)request.GetResponse();
                 IWebContentExtractor _extractor = new WebContentExtractor();
                 PageContent pageContent = _extractor.GetContent(response);
@@ -64,14 +67,16 @@ public partial class requestPage : System.Web.UI.Page
                             int port = 0;
                             if (int.TryParse(nodeList[2].TextContent, out port))
                             {
-                                AgentSingleton.getInstance.add(new Agenter()
+                                //AgentSingleton.getInstance.add();
+                                MQSend _mqsend = new MQSend();
+                                _mqsend.send("angentIp", new Agenter()
                                 {
                                     ip = nodeList[1].TextContent,
                                     port = port,
                                     type = nodeList[5].TextContent.ToLower(),
                                     survibal = dateOfNum,
                                     usable = true
-                                });
+                                }.ToString());
                             }
                         }
                     }

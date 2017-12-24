@@ -7,6 +7,7 @@ using Abot.Poco;
 using System.Text.RegularExpressions;
 using AngleSharp.Dom;
 using Abot.Core;
+using RabbitMQHelper;
 
 namespace Abot.Logic.News
 {
@@ -28,11 +29,13 @@ namespace Abot.Logic.News
         /// IAbotProceed：根据不同类型初始化不同的功能项
         /// </summary>
         private AbotContext _abotcontext;
+        private MQSend _mqsend = null;
         /// <summary>
         /// 构造函数
         /// </summary>
         public AbotAgent(AbotContext abotContext)
         {
+            _mqsend = new MQSend();
             _abotcontext = abotContext;
         }
         /// <summary>
@@ -102,14 +105,15 @@ namespace Abot.Logic.News
                                 int port = 0;
                                 if (int.TryParse(nodeList[2].TextContent, out port))
                                 {
-                                    AgentSingleton.getInstance.add(new Agenter()
+                                    Agenter agent = new Agenter()
                                     {
                                         ip = nodeList[1].TextContent,
                                         port = port,
                                         type = nodeList[5].TextContent.ToLower(),
                                         survibal = dateOfNum,
                                         usable = true
-                                    });
+                                    };
+                                    _mqsend.send("angentIp", agent.ToString());
                                 }
                             }
                         }

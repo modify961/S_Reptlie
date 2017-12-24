@@ -13,7 +13,7 @@ public partial class regexMatch : System.Web.UI.Page
     {
         MQSend mqSend = new MQSend();
         MQReceive mqReceive = new MQReceive();
-        mqSend.send("hello", "123");
+        //mqSend.send("hello", "123");
         mqReceive.Receive();
     }
 
