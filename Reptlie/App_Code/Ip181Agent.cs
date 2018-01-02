@@ -3,7 +3,7 @@ using Abot.Poco;
 using AngleSharp.Dom;
 using AngleSharp.Dom.Html;
 using AngleSharp.Parser.Html;
-using HtmlAgilityPack;
+using Quartz;
 using RabbitMQHelper;
 using System;
 using System.Collections.Generic;
@@ -11,17 +11,17 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
 
-public partial class requestPage : System.Web.UI.Page
+/// <summary>
+/// Ip181Agent 的摘要说明
+/// </summary>
+public class Ip181Agent : IJob
 {
-    protected void Page_Load(object sender, EventArgs e)
-    {
-        Label1.Text = AgentSingleton.getInstance.count().ToString();
-    }
-
-    protected void Button1_Click(object sender, EventArgs e)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="context"></param>
+    public void Execute(IJobExecutionContext context)
     {
         HttpWebRequest request = null;
         HttpWebResponse response = null;
@@ -52,10 +52,11 @@ public partial class requestPage : System.Web.UI.Page
                                 ip = nodeList[0].TextContent,
                                 port = port,
                                 type = nodeList[3].TextContent.ToLower(),
+                                anonymous= nodeList[2].TextContent,
                                 survibal = 0,
                                 usable = true
                             };
-                            //_mqsend.send("angentIp", agent.ToString());
+                            _mqsend.send("angentIp", agent.ToString());
                         }
                     }
                 }
@@ -66,23 +67,11 @@ public partial class requestPage : System.Web.UI.Page
         {
         }
     }
-    protected void Button2_Click(object sender, EventArgs e)
-    {
-        HttpWebRequest request = null;
-        HttpWebResponse response = null;
-        try
-        {
-            request = BuildRequestObject(new Uri(@"http://www.ip181.com/"));
-            WebProxy webProxy = new WebProxy("112.114.95.156", 8118);
-            request.Proxy = webProxy;
-            response = (HttpWebResponse)request.GetResponse();
-            HttpStatusCode code=response.StatusCode;
-        }
-        catch (Exception ex)
-        {
-        }
-
-    }
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="uri"></param>
+    /// <returns></returns>
     protected HttpWebRequest BuildRequestObject(Uri uri)
     {
         HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);

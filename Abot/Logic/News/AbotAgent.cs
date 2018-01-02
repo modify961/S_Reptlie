@@ -110,6 +110,7 @@ namespace Abot.Logic.News
                                         ip = nodeList[1].TextContent,
                                         port = port,
                                         type = nodeList[5].TextContent.ToLower(),
+                                        anonymous="高匿",
                                         survibal = dateOfNum,
                                         usable = true
                                     };
