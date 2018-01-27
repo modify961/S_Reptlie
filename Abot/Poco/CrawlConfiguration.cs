@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Abot.Core;
+using Abot.Support;
+using System;
 using System.Collections.Generic;
 
 namespace Abot.Poco
@@ -29,6 +31,10 @@ namespace Abot.Poco
             HttpServicePointConnectionLimit = 200;
             HttpRequestTimeoutInSeconds = 15;
             IsSslCertificateValidationEnabled = true;
+            //默认不使用代理
+            useAgent = false;
+            //默认不使用仿真浏览器
+            simulation = false;
         }
 
         #region crawlBehavior
@@ -273,6 +279,24 @@ namespace Abot.Poco
         /// </summary>
         public string LoginPassword { get; set; }
 
+        #endregion
+        #region 扩展参数
+        /// <summary>
+        /// 代理IP操作类
+        /// </summary>
+        public AgentHelp agentHelp { get; set; }
+        /// <summary>
+        /// 请求头，从谷歌浏览器获取即可
+        /// </summary>
+        public string requestHeader { get; set; }
+        /// <summary>
+        /// 是否使用代理IP
+        /// </summary>
+        public bool useAgent { get; set; }
+        /// <summary>
+        /// 是否使用仿真浏览器。当为false时requestHeader失效
+        /// </summary>
+        public bool simulation { get; set; }
         #endregion
     }
 }

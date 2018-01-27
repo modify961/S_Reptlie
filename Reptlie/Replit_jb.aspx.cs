@@ -1,34 +1,24 @@
 ﻿using Abot.Crawler;
 using Abot.Logic;
 using Abot.Logic.enums;
+using Abot.Logic.reptlie;
 using Abot.Poco;
-using Quartz;
+using Abot.Support;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
 
-/// <summary>
-/// checkAgent 的摘要说明
-/// </summary>
-public class CheckAgent:IJob
+public partial class Replit_jb : System.Web.UI.Page
 {
-    public IAbotProceed iAbotProceed = null;
-    /// <summary>
-    /// 执行检测进程程序
-    /// </summary>
-    /// <param name="context"></param>
-    public void Execute(IJobExecutionContext context)
+    private Jibing jibing;
+    protected void Page_Load(object sender, EventArgs e)
     {
-        AbotFactory abotFactory = new AbotFactory();
-        AbotContext abotContext = new AbotContext()
-        {
-            abotTypeEnum = AbotTypeEnum.AGENT
-        };
-        iAbotProceed = abotFactory.execute(abotContext);
-        var crawler = GetManuallyConfiguredWebCrawler();
-        var result = crawler.Crawl(iAbotProceed.obtainFeedUrl());
+
     }
+
     public IWebCrawler GetManuallyConfiguredWebCrawler()
     {
         CrawlConfiguration config = new CrawlConfiguration();
@@ -39,23 +29,22 @@ public class CheckAgent:IJob
         config.IsRespectRobotsDotTextEnabled = false;
         config.IsUriRecrawlingEnabled = false;
         //System.Environment.ProcessorCount：获取当前计算机上的处理器数。
-        //config.MaxConcurrentThreads = System.Environment.ProcessorCount;
-        config.MaxConcurrentThreads = 1;
-        config.MaxPagesToCrawl = 1000;
+        config.MaxConcurrentThreads = System.Environment.ProcessorCount;
+        //config.MaxConcurrentThreads = 1;
+        config.MaxPagesToCrawl = 50000;
         config.MaxPagesToCrawlPerDomain = 0;
         config.MinCrawlDelayPerDomainMilliSeconds = 1000;
-        config.IsHttpRequestAutomaticDecompressionEnabled = true;
-        //调用WebCrawler
+        //初始化代理IP池操作类
+        config.agentHelp = new AgentHelp();
+        config.useAgent = false;
+        config.simulation = false;
+        //初始化执行类
         var crawler = new PoliteWebCrawler(config, null, null, null, null, null, null, null, null);
 
         crawler.ShouldCrawlPage(ShouldCrawlPage);
-
         crawler.ShouldDownloadPageContent(ShouldDownloadPageContent);
-
         crawler.ShouldCrawlPageLinks(ShouldCrawlPageLinks);
-
         crawler.PageCrawlStartingAsync += crawler_ProcessPageCrawlStarting;
-
         //爬取页面后的回调函数
         crawler.PageCrawlCompletedAsync += crawler_ProcessPageCrawlCompletedAsync;
         crawler.PageCrawlDisallowedAsync += crawler_PageCrawlDisallowed;
@@ -63,35 +52,68 @@ public class CheckAgent:IJob
 
         return crawler;
     }
+    protected void Button1_Click(object sender, EventArgs e)
+    {
+        jibing = new Jibing(new AbotContext()
+        {
+            abotTypeEnum = AbotTypeEnum.DZDP
+        });
+        var crawler = GetManuallyConfiguredWebCrawler();
+        var result = crawler.Crawl(jibing.obtainFeedUrl());
+    }
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     public void crawler_ProcessPageCrawlStarting(object sender, PageCrawlStartingArgs e)
     {
+        jibing.crawler_ProcessPageCrawlStarting(sender, e);
     }
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     public void crawler_PageCrawlDisallowed(object sender, PageCrawlStartingArgs e)
     {
+        jibing.crawler_PageCrawlDisallowed(sender, e);
     }
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     public void crawler_PageLinksCrawlDisallowed(object sender, PageLinksCrawlDisallowedArgs e)
     {
+        jibing.crawler_PageLinksCrawlDisallowed(sender, e);
     }
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     public void crawler_ProcessPageCrawlCompletedAsync(object sender, PageCrawlCompletedArgs e)
     {
-        iAbotProceed.crawler_ProcessPageCrawlCompletedAsync(sender, e);
+        jibing.crawler_ProcessPageCrawlCompletedAsync(sender, e);
     }
+
     /// <summary>
     /// 如果是Feed页面或者分页或者详细页面才需要爬取
     /// </summary>
     private CrawlDecision ShouldCrawlPage(PageToCrawl pageToCrawl, CrawlContext context)
     {
-        return iAbotProceed.ShouldCrawlPage(pageToCrawl, context);
+        return jibing.ShouldCrawlPage(pageToCrawl, context);
     }
     /// <summary>
     /// 如果是Feed页面或者分页或者详细页面才需要爬取
     /// </summary>
     private CrawlDecision ShouldDownloadPageContent(PageToCrawl pageToCrawl, CrawlContext crawlContext)
     {
-        return iAbotProceed.ShouldDownloadPageContent(pageToCrawl, crawlContext);
+        return jibing.ShouldDownloadPageContent(pageToCrawl, crawlContext);
     }
     private CrawlDecision ShouldCrawlPageLinks(CrawledPage crawledPage, CrawlContext crawlContext)
     {
-        return iAbotProceed.ShouldDownloadPageContent(crawledPage, crawlContext);
+        return jibing.ShouldCrawlPageLinks(crawledPage, crawlContext);
     }
 }

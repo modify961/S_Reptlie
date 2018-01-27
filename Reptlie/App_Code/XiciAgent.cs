@@ -13,14 +13,10 @@ using System.Text;
 using System.Web;
 
 /// <summary>
-/// Ip181Agent 的摘要说明
+/// XiciAgent 的摘要说明
 /// </summary>
-public class Ip181Agent : IJob
+public class XiciAgent:IJob
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="context"></param>
     public void Execute(IJobExecutionContext context)
     {
         HttpWebRequest request = null;
@@ -28,46 +24,48 @@ public class Ip181Agent : IJob
         try
         {
             System.GC.Collect();
-            request = BuildRequestObject(new Uri(@"http://www.ip181.com/"));
+            request = BuildRequestObject(new Uri(@"http://www.xicidaili.com/nn/1"));
             response = (HttpWebResponse)request.GetResponse();
             IWebContentExtractor _extractor = new WebContentExtractor();
             PageContent pageContent = _extractor.GetContent(response);
             HtmlParser htmlParser = new HtmlParser();
             IHtmlDocument document = htmlParser.Parse(pageContent.Text);
-            var table = document.QuerySelector("table");
-            var linkDom = table.QuerySelectorAll("tr");
+            var table = document.QuerySelector("#ip_list");
+            var linkDom = table.QuerySelectorAll(".odd");
             StringBuilder stringBuilder = new StringBuilder();
+            String date = "";
             foreach (var cq in linkDom)
             {
                 IHtmlCollection<IElement> nodeList = cq.QuerySelectorAll("td");
-                if (nodeList.Length > 5)
+                if (nodeList.Length > 9)
                 {
-                    if (nodeList[3].TextContent.ToLower().IndexOf("http") != -1)
+                    if (nodeList[5].TextContent.ToLower().IndexOf("http") != -1)
                     {
                         int port = 0;
-                        if (int.TryParse(nodeList[1].TextContent, out port))
+                        if (int.TryParse(nodeList[2].TextContent, out port))
                         {
                             MQSend _mqsend = new MQSend();
-                            Agenter agent = new Agenter()
+                            _mqsend.send("angentIp", new Agenter()
                             {
-                                ip = nodeList[0].TextContent,
+                                ip = nodeList[1].TextContent,
                                 port = port,
-                                type = nodeList[3].TextContent.ToLower(),
-                                anonymous = nodeList[2].TextContent,
+                                anonymous="高匿",
+                                type = nodeList[5].TextContent.ToLower(),
                                 survibal = 0,
                                 usable = true
-                            };
-                            _mqsend.send("angentIp", agent.ToString());
+                            }.ToString());
                         }
                     }
                 }
             }
+            
 
         }
         catch (Exception ex)
         {
         }
-        finally {
+        finally
+        {
             if (response != null)
             {
                 response.Close();

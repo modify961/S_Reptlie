@@ -11,16 +11,11 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Web;
-
 /// <summary>
-/// Ip181Agent 的摘要说明
+/// KuaidaiAgent 的摘要说明
 /// </summary>
-public class Ip181Agent : IJob
+public class KuaidaiAgent : IJob
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="context"></param>
     public void Execute(IJobExecutionContext context)
     {
         HttpWebRequest request = null;
@@ -28,14 +23,14 @@ public class Ip181Agent : IJob
         try
         {
             System.GC.Collect();
-            request = BuildRequestObject(new Uri(@"http://www.ip181.com/"));
+            request = BuildRequestObject(new Uri(@"https://www.kuaidaili.com/free/inha/"));
             response = (HttpWebResponse)request.GetResponse();
             IWebContentExtractor _extractor = new WebContentExtractor();
             PageContent pageContent = _extractor.GetContent(response);
             HtmlParser htmlParser = new HtmlParser();
             IHtmlDocument document = htmlParser.Parse(pageContent.Text);
-            var table = document.QuerySelector("table");
-            var linkDom = table.QuerySelectorAll("tr");
+            var table = document.QuerySelector("#list");
+            var linkDom = table.QuerySelectorAll("tbody tr");
             StringBuilder stringBuilder = new StringBuilder();
             foreach (var cq in linkDom)
             {
@@ -53,7 +48,7 @@ public class Ip181Agent : IJob
                                 ip = nodeList[0].TextContent,
                                 port = port,
                                 type = nodeList[3].TextContent.ToLower(),
-                                anonymous = nodeList[2].TextContent,
+                                anonymous = "高匿",
                                 survibal = 0,
                                 usable = true
                             };
@@ -67,7 +62,8 @@ public class Ip181Agent : IJob
         catch (Exception ex)
         {
         }
-        finally {
+        finally
+        {
             if (response != null)
             {
                 response.Close();

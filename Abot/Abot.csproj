@@ -72,6 +72,9 @@
       <HintPath>..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.Extensions.Desktop.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="Robots, Version=1.0.8.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\NRobotsPatched.1.0.8.0\lib\net40\Robots.dll</HintPath>
       <Private>True</Private>
@@ -88,6 +91,7 @@
       <HintPath>..\packages\Microsoft.Bcl.1.1.10\lib\net40\System.Threading.Tasks.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -98,15 +102,20 @@
     <Compile Include="Core\BloomFilterCrawledUrlRepository.cs" />
     <Compile Include="Core\CompactCrawledUrlRepository.cs" />
     <Compile Include="Core\AngleSharpHyperLinkParser.cs" />
+    <Compile Include="Core\HttpWebClient.cs" />
     <Compile Include="Crawler\RobotsDotTextParseCompletedArgs.cs" />
     <Compile Include="Logic\AbotContext.cs" />
     <Compile Include="Logic\AbotFactory.cs" />
     <Compile Include="Logic\enums\AbotTypeEnum.cs" />
     <Compile Include="Logic\IAbotProceed.cs" />
-    <Compile Include="Logic\News\AbotAgent.cs" />
-    <Compile Include="Logic\News\AbotDianping.cs" />
-    <Compile Include="Logic\News\AbotNews.cs" />
+    <Compile Include="Logic\model\DiscussInfo.cs" />
+    <Compile Include="Logic\model\JobInfo.cs" />
+    <Compile Include="Logic\model\ShopInfo.cs" />
+    <Compile Include="Logic\reptlie\AbotDZDP.cs" />
+    <Compile Include="Logic\reptlie\Jibing.cs" />
+    <Compile Include="Logic\reptlie\ZhiLian.cs" />
     <Compile Include="Poco\HttpWebResponseWrapper.cs" />
+    <Compile Include="Support\AgentHelp.cs" />
     <Compile Include="Util\BloomFilter.cs" />
     <Compile Include="Util\CachedMemoryMonitor.cs" />
     <Compile Include="Core\Scheduler.cs" />

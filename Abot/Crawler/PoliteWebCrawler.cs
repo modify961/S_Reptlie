@@ -74,7 +74,8 @@ namespace Abot.Crawler
             : base(crawlConfiguration, crawlDecisionMaker, threadManager, scheduler, pageRequester, hyperLinkParser, memoryManager)
         {
             _domainRateLimiter = domainRateLimiter ?? new DomainRateLimiter(_crawlContext.CrawlConfiguration.MinCrawlDelayPerDomainMilliSeconds);
-            _robotsDotTextFinder = robotsDotTextFinder ?? new RobotsDotTextFinder(new PageRequester(_crawlContext.CrawlConfiguration));
+            //_robotsDotTextFinder = robotsDotTextFinder ?? new RobotsDotTextFinder(new PageRequester(_crawlContext.CrawlConfiguration));
+            _robotsDotTextFinder = robotsDotTextFinder ?? new RobotsDotTextFinder(new ImitateRequester(_crawlContext.CrawlConfiguration));
         }
         /// <summary>
         /// 

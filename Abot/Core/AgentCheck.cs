@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -22,16 +23,44 @@ namespace Abot.Core
             HttpWebResponse response = null;
             try
             {
-                request = BuildRequestObject(new Uri(@"http://www.dianping.com/jinan/food"));
+                System.GC.Collect();
+                request = BuildRequestObject(new Uri(@"http://ip.chinaz.com/"));
                 WebProxy proxy = new WebProxy(agenter.ip, agenter.port);
                 request.Proxy = proxy;
                 response = (HttpWebResponse)request.GetResponse();
+
                 if (response.StatusCode == HttpStatusCode.OK)
-                    return true;
-                return true;
+                {
+                    StreamReader reader = new StreamReader(response.GetResponseStream());//获取应答流
+                    string content = reader.ReadToEnd();
+                    if (content.IndexOf("search-write-left w442 pr") != -1)
+                    {
+                        response.Close();
+                        response.Dispose();
+                        request.Abort();
+                        return true;
+                    }
+                    response.Close();
+                    response.Dispose();
+                    request.Abort();
+                    return false;
+                }
+                if (response != null)
+                {
+                    response.Close();
+                    response.Dispose();
+                }
+                request.Abort();
+                return false;
             }
             catch (Exception ex)
             {
+                if (response != null)
+                {
+                    response.Close();
+                    response.Dispose();
+                }
+                request.Abort();
                 return false;
             }
         }
@@ -43,6 +72,8 @@ namespace Abot.Core
             request.Accept = "*/*";
             request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
             request.Timeout = 5 * 1000;
+            request.KeepAlive = false;
+            request.ReadWriteTimeout = 5 * 1000;
             return request;
         }
     }

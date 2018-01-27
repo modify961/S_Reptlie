@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Abot.Logic.News;
 
 namespace Abot.Logic
 {
@@ -19,15 +18,6 @@ namespace Abot.Logic
         public IAbotProceed execute(AbotContext abotContext) {
             _abotcontext = abotContext;
             switch (_abotcontext.abotTypeEnum) {
-                case AbotTypeEnum.NEWS:
-                    _iabotproceed = new AbotNews(_abotcontext);
-                    break;
-                case AbotTypeEnum.DZDP:
-                    _iabotproceed = new AbotDianping(_abotcontext);
-                    break;
-                case AbotTypeEnum.AGENT:
-                    _iabotproceed = new AbotAgent(_abotcontext);
-                    break;
                 default:
                     break;
             }

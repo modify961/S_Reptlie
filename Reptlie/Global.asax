@@ -5,10 +5,13 @@
     private const string DummyCacheItemKey = "default";  
     void Application_Start(object sender, EventArgs e) 
     {
-         //每天凌晨4点和下午4点开始执行爬取
-        QuartzHelp.ExecuteByCron<CheckAgent>("0 0 4,16 * * ? ");
+        System.Net.ServicePointManager.DefaultConnectionLimit = 512;
         //每10分钟执行一次代理IP检索
         QuartzHelp.ExecuteByCron<Ip181Agent>("0 0/10 * * * ? ");
+        //每10分钟从西祠执行一次代理IP检索
+        QuartzHelp.ExecuteByCron<XiciAgent>("0 0/10 * * * ? ");
+        //每30分钟从快代理执行一次代理IP检索
+        QuartzHelp.ExecuteByCron<KuaidaiAgent>("0 0/30 * * * ? ");
        
     }
     
