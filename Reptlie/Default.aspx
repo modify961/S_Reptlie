@@ -10,7 +10,17 @@
 <body>
     <form id="form1" runat="server">
         <div>
-            <asp:Button ID="btn_test" runat="server" Text="测试" OnClick="btn_test_Click" />
+            <ul>
+                <li>
+                    <a href="reptile_job.aspx">智联招聘</a>
+                </li>
+                 <li>
+                    <a href="reptile_jb.aspx">疾病网</a>
+                </li>
+                <li>
+                    <a href="reptile_qb.aspx">糗百网</a>
+                </li>
+            </ul>
         </div>
     </form>
 </body>

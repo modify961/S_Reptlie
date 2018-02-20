@@ -76,5 +76,9 @@ namespace Abot.Logic.model
         ///公司行业
         /// </summary>
         public string companyTrde { set; get; }
+        /// <summary>
+        /// 公司网址
+        /// </summary>
+        public string url { set; get; }
     }
 }

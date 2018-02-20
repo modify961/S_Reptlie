@@ -649,7 +649,7 @@ namespace Abot.Crawler
                     _logger.DebugFormat("Waiting for links to be scheduled...");
                 }
                 Random rd = new Random();
-                int num=rd.Next(5, 10);
+                int num=rd.Next(_crawlContext.CrawlConfiguration.minNeed, _crawlContext.CrawlConfiguration.maxNeed);
                 //临时处理每隔10秒开始一个线程
                 Thread.Sleep(num*1000);
             }

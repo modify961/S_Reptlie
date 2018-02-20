@@ -99,7 +99,6 @@ namespace Abot.Core
         {
             if (uri == null)
                 throw new ArgumentNullException("uri");
-
             CrawledPage crawledPage = new CrawledPage(uri);
 
             HttpWebRequest request = null;
@@ -112,15 +111,11 @@ namespace Abot.Core
                  * ****************/
                 if (_config.useAgent)
                 {
-                    Agenter agenter = _config.agentHelp.next();
+                    Agenter agenter = _config.agentHelp.next(_config.icheckAgent);
                     if (agenter != null)
                     {
-                        bool isUsed = AgentCheck.agentCheck(agenter);
-                        if (isUsed)
-                        {
-                            WebProxy proxy = new WebProxy(agenter.ip, agenter.port);
-                            request.Proxy = proxy;
-                        }
+                        WebProxy proxy = new WebProxy(agenter.ip, agenter.port);
+                        request.Proxy = proxy;
                     }
                 }
                 /*****************代理结束***********************/
@@ -353,15 +348,11 @@ namespace Abot.Core
                  * ****************/
                 if (_config.useAgent)
                 {
-                    Agenter agenter = _config.agentHelp.next();
+                    Agenter agenter = _config.agentHelp.next(_config.icheckAgent);
                     if (agenter != null)
                     {
-                        bool isUsed = AgentCheck.agentCheck(agenter);
-                        if (isUsed)
-                        {
-                            WebProxy proxy = new WebProxy(agenter.ip, agenter.port);
-                            request.Proxy = proxy;
-                        }
+                        WebProxy proxy = new WebProxy(agenter.ip, agenter.port);
+                        request.Proxy = proxy;
                     }
                 }
                 /*****************代理结束***********************/

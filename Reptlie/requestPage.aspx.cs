@@ -31,15 +31,15 @@ public partial class requestPage : System.Web.UI.Page
         {
             System.GC.Collect();
             string heads = @"Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8
-Accept-Encoding:gzip, deflate, br
+Accept-Encoding:gzip, deflate
 Accept-Language:zh-CN,zh;q=0.8
-Cache-Control:max-age=0
-Cookie:Hm_lvt_aeced876570452e65008ee68cd836a07=1516880358; Hm_lpvt_aeced876570452e65008ee68cd836a07=1516880918; bd_uid=c24f33b5-5311-a135-0daf-f23219c6-aaaa; bigeater_AB_index=B; bigeater_session_id=7aa7-050b-2387-4251-57e7-dd97-ec68-4361; a101uname=%E4%B8%AD%E5%9B%BD%E8%AE%BF%E5%AE%A2; a101usercookie=085ab3b9-c0c5-4f75-9b79-264faed42d09; a101uid=085ab3b9-c0c5-4f75-9b79-264faed42d09; a101Isinvite=1; a101sid=7ec7f1da-573a-4b80-9167-82e51f5a4e69; Hm_lvt_ef169fbeadffa8cf7db5f5ace40c6c8f=1516880403; Hm_lpvt_ef169fbeadffa8cf7db5f5ace40c6c8f=1516880403; SourceInof2014=AAEAAAD/////AQAAAAAAAAAMAgAAAD5VdGlsaXR5LCBWZXJzaW9uPTEuMS4xLjEsIEN1bHR1cmU9bmV1dHJhbCwgUHVibGljS2V5VG9rZW49bnVsbAUBAAAAGVV0aWxpdHkuU291cmNlS2V5V29yZE1vZGUKAAAACl9Tb3VyY2VVcmwJX1Zpc2l0VXJsC19Eb21haW5OYW1lB19Vc2VySXAJX1VzZXJUeXBlDV9TZWFyY2hFbmdpbmUIX0tleVdvcmQFX1N0aWQFX0dHaWQNX0xhc3RNb2RpZmllZAEBAQEAAQEBAQAIDQIAAAAGAwAAABdodHRwczovL3d3dy5qaWFua2UuY29tLwYEAAAAKGh0dHBzOi8vd3d3LmppYW5rZS5jb20vaGVscC9zaXRlbWFwLmh0bWwGBQAAAAsuamlhbmtlLmNvbQYGAAAADDE3Mi4xNi4yLjI0NgEAAAAGBwAAAAAJBwAAAAkHAAAACQcAAAClDdI5K2TViAs%3D; bfd_s=219645570.9552612.1516880403678; tmc=1.219645570.790494.1516880403681.1516880403681.1516880403681; tma=219645570.790494.1516880403681.1516880403681.1516880403681.1; tmd=1.219645570.790494.1516880403681.; bfd_g=acf8c8d6123c46730000bfaa000007d859ef1457; Hm_lvt_ce9691c89e2a82792aea2dcba46ea4f2=1516880358; Hm_lpvt_ce9691c89e2a82792aea2dcba46ea4f2=1516880918; bigeater_session_update_time=1516880918032
-Referer:https://www.jianke.com/jibing/gaishu/264648
+Connection:keep-alive
+Cookie:JSSearchModel=0; LastCity%5Fid=702; LastCity=%e6%b5%8e%e5%8d%97; hiddenEpinDiv=none; bdshare_firstime=1516711737715; dywez=95841923.1517032021.6.5.dywecsr=other|dyweccn=121113803|dywecmd=cnt|dywectr=%E6%99%BA%E8%81%94%E6%8B%9B%E8%81%98; _jzqy=1.1516711211.1517032021.1.jzqsr=baidu|jzqct=%E6%99%BA%E8%81%94%E6%8B%9B%E8%81%98.-; _jzqckmp=1; LastSearchHistory=%7b%22Id%22%3a%22f93c061a-a1e2-4d07-9c87-a50e266dc74f%22%2c%22Name%22%3a%22%e6%b5%8e%e5%8d%97+%2b+%e8%bd%af%e4%bb%b6%2f%e4%ba%92%e8%81%94%e7%bd%91%e5%bc%80%e5%8f%91%2f%e7%b3%bb%e7%bb%9f%e9%9b%86%e6%88%90%22%2c%22SearchUrl%22%3a%22http%3a%2f%2fsou.zhaopin.com%2fjobs%2fsearchresult.ashx%3fbj%3d160000%26jl%3d%25e6%25b5%258e%25e5%258d%2597%26p%3d1%26isadv%3d0%22%2c%22SaveTime%22%3a%22%5c%2fDate(1517032021929%2b0800)%5c%2f%22%7d; dywea=95841923.2981705312848688600.1516711211.1516881176.1517032021.6; dyweb=95841923.13.8.1517032104572; __utma=269921210.1641372652.1516711211.1516881176.1517032021.5; __utmb=269921210.13.9.1517032106314; __utmz=269921210.1517032021.5.4.utmcsr=other|utmccn=121113803|utmcmd=cnt|utmctr=%E6%99%BA%E8%81%94%E6%8B%9B%E8%81%98; Hm_lvt_38ba284938d5eddca645bb5e02a02006=1516881182,1516881186,1517032021,1517032025; _qzja=1.1659610844.1516711252419.1516878513898.1517032113100.1517032118688.1517032149606..0.0.33.4; _qzjb=1.1517032113100.3.0.0.0; _qzjto=3.1.0; _jzqa=1.99071692743118240.1516711211.1516881176.1517032021.6; _jzqb=1.8.10.1517032021.1; urlfrom2=121126445; adfcid2=none; adfbid2=0
+Host:jobs.zhaopin.com
 Upgrade-Insecure-Requests:1
 User-Agent:Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36";
 
-          string url = "https://www.jianke.com/jibing/gaishu/264713";
+          string url = "http://jobs.zhaopin.com/506152584250028.htm";
             //string url = "http://www.dianping.com/";
 
             HttpWebClient s = new HttpWebClient(true);
@@ -52,39 +52,59 @@ User-Agent:Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, l
             //PageContent pageContent = _extractor.GetContent(response);
             HtmlParser htmlParser = new HtmlParser();
             IHtmlDocument document = htmlParser.Parse(sw);
-            string str = "";
+            JobInfo jobInfo = new JobInfo();
             //获取店名
-            var workName = document.QuerySelector(".f16");
+            var workName = document.QuerySelector(".inner-left h1");
             if (workName != null)
-                str = workName.InnerHtml.Replace(" 的症状：", "")+";";
+                jobInfo.name = workName.TextContent;
             //获取评级
-            var welfare_tab = document.QuerySelector(".h1_sm");
-            if (welfare_tab != null)
-                str = str +  welfare_tab.InnerHtml.Replace("别名：", "") +",";
-            str = str + ";";
-            var content = document.QuerySelectorAll(".tips_list .clearfix");
-            if (content != null)
+            var welfare_tab = document.QuerySelectorAll(".welfare-tab-box span");
+            jobInfo.mate = "";
+            foreach (var item in welfare_tab)
             {
-                foreach (var item in content)
+                jobInfo.mate = jobInfo.mate + item.TextContent;
+            }
+
+            //获取评论总数
+            var reviewCount = document.QuerySelectorAll(".terminalpage-left strong");
+            if (reviewCount != null)
+            {
+                if (reviewCount.Count() > 7)
                 {
-                    if (item.InnerHtml.IndexOf("典型症状") != -1)
-                    {
-                        var qc = item.QuerySelectorAll("a");
-                        foreach (var q in qc) {
-                            str = str + q.InnerHtml + ",";
-                        }
-                        str = str + ";";
+                    jobInfo.pay = reviewCount[0].TextContent;
+                    jobInfo.address = reviewCount[1].TextContent;
+                    DateTime pub = DateTime.Now;
+                    if (DateTime.TryParse(reviewCount[2].TextContent, out pub)) {
+                        jobInfo.publicDate = pub.ToString("yyyy-MM-dd HH:mm:ss");
                     }
-                    
-                    if (item.InnerHtml.IndexOf("就诊科室") != -1)
-                    {
-                       
-                        var qc = item.QuerySelectorAll("span");
-                        foreach (var q in qc)
-                        {
-                            str = str + q.InnerHtml + ",";
-                        }
-                        str = str + ";";
+                    jobInfo.workType = reviewCount[3].TextContent;
+                    jobInfo.expe = reviewCount[4].TextContent;
+                    jobInfo.rec = reviewCount[5].TextContent;
+                    jobInfo.num = reviewCount[6].TextContent;
+                    jobInfo.jobType = reviewCount[7].TextContent;
+                }
+            }
+            //获取平均价格
+            var avgPriceTitle = document.QuerySelector(".tab-inner-cont");
+            if (avgPriceTitle != null)
+                jobInfo.remark = avgPriceTitle.TextContent;
+            //获取综合评分 口味、环境、服务
+            var comment_score = document.QuerySelector(".company-name-t a");
+            if (comment_score != null)
+            {
+                jobInfo.company = comment_score.TextContent;
+
+            }
+            var company_box = document.QuerySelectorAll(".company-box strong");
+            if (company_box != null)
+            {
+                if (company_box.Count() > 3)
+                {
+                    jobInfo.companyNum = company_box[0].TextContent;
+                    jobInfo.companyType = company_box[1].TextContent;
+                    jobInfo.companyTrde = company_box[2].TextContent;
+                    if (company_box[3].TextContent.IndexOf("http") != -1) {
+                        jobInfo.url = company_box[3].TextContent;
                     }
                 }
             }

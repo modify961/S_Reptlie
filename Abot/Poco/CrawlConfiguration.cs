@@ -1,4 +1,5 @@
 ﻿using Abot.Core;
+using Abot.Logic;
 using Abot.Support;
 using System;
 using System.Collections.Generic;
@@ -297,6 +298,18 @@ namespace Abot.Poco
         /// 是否使用仿真浏览器。当为false时requestHeader失效
         /// </summary>
         public bool simulation { get; set; }
+        /// <summary>
+        /// 检查代理是否可用类
+        /// </summary>
+        public ICheckAgent icheckAgent { get; set; }
+        /// <summary>
+        /// 线程间隔时间最小值
+        /// </summary>
+        public int minNeed { set; get; }
+        /// <summary>
+        /// 线程间隔时间最小值
+        /// </summary>
+        public int maxNeed { set; get; }
         #endregion
     }
 }

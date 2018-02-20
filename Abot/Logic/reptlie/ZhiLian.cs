@@ -20,7 +20,7 @@ namespace Abot.Logic.reptlie
         /// <summary>
         /// 种子Url；济南美食频道URL
         /// </summary>
-        public readonly Uri _foodurl = new Uri(@"http://jobs.zhaopin.com/120823547250330.htm");
+        public readonly Uri _foodurl = null;
 
         /// <summary>
         ///职位页面
@@ -44,6 +44,7 @@ namespace Abot.Logic.reptlie
         public ZhiLian(AbotContext abotContext)
         {
             _abotcontext = abotContext;
+            _foodurl=new Uri(abotContext.rootUrl);
         }
         /// <summary>
         /// 
@@ -79,13 +80,15 @@ namespace Abot.Logic.reptlie
                     //获取店名
                     var workName = e.CrawledPage.AngleSharpHtmlDocument.QuerySelector(".inner-left h1");
                     if (workName != null)
-                        jobInfo.name = workName.InnerHtml;
+                        jobInfo.name = workName.TextContent;
+                    if (string.IsNullOrEmpty(jobInfo.name))
+                        return;
                     //获取评级
                     var welfare_tab = e.CrawledPage.AngleSharpHtmlDocument.QuerySelectorAll(".welfare-tab-box span");
                     jobInfo.mate = "";
                     foreach (var item in welfare_tab)
                     {
-                        jobInfo.mate = jobInfo.mate + item.InnerHtml;
+                        jobInfo.mate = jobInfo.mate + item.TextContent;
                     }
 
                     //获取评论总数
@@ -94,25 +97,29 @@ namespace Abot.Logic.reptlie
                     {
                         if (reviewCount.Count() > 7)
                         {
-                            jobInfo.pay = reviewCount[0].InnerHtml;
-                            jobInfo.address = reviewCount[1].InnerHtml;
-                            jobInfo.publicDate = reviewCount[2].InnerHtml;
-                            jobInfo.workType = reviewCount[3].InnerHtml;
-                            jobInfo.expe = reviewCount[4].InnerHtml;
-                            jobInfo.rec = reviewCount[5].InnerHtml;
-                            jobInfo.num = reviewCount[6].InnerHtml;
-                            jobInfo.jobType = reviewCount[7].InnerHtml;
+                            jobInfo.pay = reviewCount[0].TextContent;
+                            jobInfo.address = reviewCount[1].TextContent;
+                            DateTime pub = DateTime.Now;
+                            if (DateTime.TryParse(reviewCount[2].TextContent, out pub))
+                            {
+                                jobInfo.publicDate = pub.ToString("yyyy-MM-dd HH:mm:ss");
+                            }
+                            jobInfo.workType = reviewCount[3].TextContent;
+                            jobInfo.expe = reviewCount[4].TextContent;
+                            jobInfo.rec = reviewCount[5].TextContent;
+                            jobInfo.num = reviewCount[6].TextContent;
+                            jobInfo.jobType = reviewCount[7].TextContent;
                         }
                     }
                     //获取平均价格
                     var avgPriceTitle = e.CrawledPage.AngleSharpHtmlDocument.QuerySelector(".tab-inner-cont");
                     if (avgPriceTitle != null)
-                        jobInfo.remark = avgPriceTitle.InnerHtml;
+                        jobInfo.remark = avgPriceTitle.TextContent;
                     //获取综合评分 口味、环境、服务
                     var comment_score = e.CrawledPage.AngleSharpHtmlDocument.QuerySelector(".company-name-t a");
                     if (comment_score != null)
                     {
-                        jobInfo.company = comment_score.InnerHtml;
+                        jobInfo.company = comment_score.TextContent;
 
                     }
                     var company_box = e.CrawledPage.AngleSharpHtmlDocument.QuerySelectorAll(".company-box strong");
@@ -120,11 +127,16 @@ namespace Abot.Logic.reptlie
                     {
                         if (company_box.Count() > 3)
                         {
-                            jobInfo.companyNum = company_box[0].InnerHtml;
-                            jobInfo.companyType = company_box[1].InnerHtml;
-                            jobInfo.companyTrde = company_box[2].InnerHtml;
+                            jobInfo.companyNum = company_box[0].TextContent;
+                            jobInfo.companyType = company_box[1].TextContent;
+                            jobInfo.companyTrde = company_box[2].TextContent;
+                            if (company_box[3].TextContent.IndexOf("http") != -1)
+                            {
+                                jobInfo.url = company_box[3].TextContent;
+                            }
                         }
                     }
+                    
                     MQSend _mqsend = new MQSend();
                     _mqsend.send("jobs", JsonConvert.SerializeObject(jobInfo));
                 }

@@ -1,4 +1,5 @@
-﻿using Abot.Support;
+﻿using Abot.Logic.check;
+using Abot.Support;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -80,17 +81,13 @@ namespace Abot.Core
             /******************
             * 使用代理IP
             * ****************/
-            //AgentHelp agentHelp = new AgentHelp();
-            //Agenter agenter = agentHelp.next();
-            //if (agenter != null)
-            //{
-            //    bool isUsed = AgentCheck.agentCheck(agenter);
-            //    if (isUsed)
-            //    {
-            //        WebProxy proxy = new WebProxy("122.225.17.123", 8080);
-            //        request.Proxy = proxy;
-            //    }
-            //}
+            AgentHelp agentHelp = new AgentHelp();
+            Agenter agenter = agentHelp.next(new ZhiLianCheck());
+            if (agenter != null)
+            {
+                WebProxy proxy = new WebProxy(agenter.ip, agenter.port);
+                request.Proxy = proxy;
+            }
             /*****************代理结束***********************/
             #region 添加Post 参数  
             if (contentEncode == null)

@@ -17,7 +17,6 @@ public partial class _Default : System.Web.UI.Page
     }
     protected void btn_test_Click(object sender, EventArgs e)
     {
-        string name = DateTime.Now.Year.ToString() + DateTime.Now.Hour.ToString();
-        System.IO.File.AppendAllText("C:\\data\\bingzheng\\ip.txt",  "llll\r\n");
+       
     }
 }

@@ -15,6 +15,11 @@ namespace Abot.Logic
         /// 爬行配置的上下文
         /// </summary>
         private AbotContext _abotcontext;
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="abotContext"></param>
+        /// <returns></returns>
         public IAbotProceed execute(AbotContext abotContext) {
             _abotcontext = abotContext;
             switch (_abotcontext.abotTypeEnum) {
