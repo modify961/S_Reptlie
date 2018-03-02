@@ -282,11 +282,11 @@ namespace Abot.Core
         /// 
         /// </summary>
         /// <param name="config"></param>
-        public ImitateRequester(CrawlConfiguration config, bool trackcookies = false)
+        public ImitateRequester(CrawlConfiguration config)
             : this(config, null)
         {
             cookiedictionary = new Dictionary<string, Cookie>();
-            this.trackcookie = trackcookies;
+            this.trackcookie = _config.cacheCookie;
         }
         /// <summary>
         /// 
@@ -359,6 +359,21 @@ namespace Abot.Core
 
                 crawledPage.RequestStarted = DateTime.Now;
                 response = (HttpWebResponse)request.GetResponse();
+                //获取缓存
+                CookieCollection cc = new CookieCollection();
+                string cookieString = response.Headers[HttpResponseHeader.SetCookie];
+                if (!string.IsNullOrWhiteSpace(cookieString))
+                {
+                    var spilit = cookieString.Split(';');
+                    foreach (string item in spilit)
+                    {
+                        var kv = item.Split('=');
+                        if (kv.Length == 2)
+                            cc.Add(new Cookie(kv[0].Trim(), kv[1].Trim()));
+                    }
+                }
+                trackCookies(cc);
+
                 ProcessResponseObject(response);
             }
             catch (WebException e)
@@ -408,6 +423,52 @@ namespace Abot.Core
             }
 
             return crawledPage;
+        }
+        /// <summary>
+        /// 跟踪cookies
+        /// </summary>
+        /// <param name="cookies"></param>
+        private void trackCookies(CookieCollection cookies)
+        {
+            if (!trackcookie)
+                return;
+            if (cookies == null) return;
+            foreach (Cookie c in cookies)
+            {
+                if (cookiedictionary.ContainsKey(c.Name))
+                {
+                    cookiedictionary[c.Name] = c;
+                }
+                else
+                {
+                    cookiedictionary.Add(c.Name, c);
+                }
+            }
+
+        }
+        /// <summary>
+        /// 格式cookies
+        /// </summary>
+        /// <param name="cookies"></param>
+        private string getCookieStr()
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (KeyValuePair<string, Cookie> item in cookiedictionary)
+            {
+                if (!item.Value.Expired)
+                {
+                    if (sb.Length == 0)
+                    {
+                        sb.Append(item.Key).Append("=").Append(item.Value.Value);
+                    }
+                    else
+                    {
+                        sb.Append("; ").Append(item.Key).Append(" = ").Append(item.Value.Value);
+                    }
+                }
+            }
+            return sb.ToString();
+
         }
         /// <summary>
         /// 配置请求数据
@@ -542,6 +603,27 @@ namespace Abot.Core
                     }
                     #endregion
                 }
+            }
+            CookieCollection cc = new CookieCollection();
+            string cookieString = request.Headers[HttpRequestHeader.Cookie];
+            if (!string.IsNullOrWhiteSpace(cookieString))
+            {
+                var spilit = cookieString.Split(';');
+                foreach (string item in spilit)
+                {
+                    var kv = item.Split('=');
+                    if (kv.Length == 2)
+                        cc.Add(new Cookie(kv[0].Trim(), kv[1].Trim()));
+                }
+            }
+            trackCookies(cc);
+            if (!trackcookie)
+            {
+                request.Headers[HttpRequestHeader.Cookie] = "";
+            }
+            else
+            {
+                request.Headers[HttpRequestHeader.Cookie] = getCookieStr();
             }
         }
         /// <summary>

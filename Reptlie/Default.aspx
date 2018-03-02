@@ -20,8 +20,12 @@
                 <li>
                     <a href="reptile_qb.aspx">糗百网</a>
                 </li>
+                <li>
+                    <a href="reptile_wb.aspx">微博</a>
+                </li>
             </ul>
         </div>
+
     </form>
 </body>
 </html>

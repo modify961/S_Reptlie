@@ -310,6 +310,10 @@ namespace Abot.Poco
         /// 线程间隔时间最小值
         /// </summary>
         public int maxNeed { set; get; }
+        /// <summary>
+        /// 是否记住以及存储缓存
+        /// </summary>
+        public bool cacheCookie { set; get; }
         #endregion
     }
 }

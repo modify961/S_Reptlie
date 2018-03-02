@@ -70,6 +70,7 @@ namespace Abot.Logic
             config.MinCrawlDelayPerDomainMilliSeconds = 1000;
             config.minNeed = _abotContext.minNeed == 0 ? 5 : _abotContext.minNeed;
             config.maxNeed = _abotContext.minNeed == 0 ? (config.minNeed+5) : _abotContext.maxNeed;
+            config.cacheCookie = _abotContext.cacheCookie;
             //初始化代理IP池操作类
             config.useAgent = false;
             if (_abotContext.useAgent)

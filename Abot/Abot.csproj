@@ -115,10 +115,12 @@
     <Compile Include="Logic\model\JobInfo.cs" />
     <Compile Include="Logic\model\QbaiInfo.cs" />
     <Compile Include="Logic\model\ShopInfo.cs" />
+    <Compile Include="Logic\model\ZhidemaiModel.cs" />
     <Compile Include="Logic\reptlie\AbotDZDP.cs" />
     <Compile Include="Logic\reptlie\AbstractAgent.cs" />
     <Compile Include="Logic\reptlie\Jibing.cs" />
     <Compile Include="Logic\reptlie\Qbai.cs" />
+    <Compile Include="Logic\reptlie\WeiBo.cs" />
     <Compile Include="Logic\reptlie\ZhiLian.cs" />
     <Compile Include="Poco\HttpWebResponseWrapper.cs" />
     <Compile Include="Support\AgentHelp.cs" />

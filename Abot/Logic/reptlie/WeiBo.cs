@@ -1,33 +1,28 @@
-﻿using System;
+﻿using Abot.Crawler;
+using Abot.Poco;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using Abot.Crawler;
-using Abot.Poco;
 using System.Text.RegularExpressions;
-using Abot.Logic.model;
-using RabbitMQHelper;
-using Newtonsoft.Json;
-using AngleSharp.Parser.Html;
-using AngleSharp.Dom.Html;
+using System.Threading.Tasks;
 
 namespace Abot.Logic.reptlie
 {
     /// <summary>
     /// 
     /// </summary>
-    public class Qbai : AbstractAgent
+    public class WeiBo : AbstractAgent
     {
         /// <summary>
-        ///是否为糗百文字内容
+        ///
         /// </summary>
-        private Regex _contentregex = new Regex("^https://www.qiushibaike.com/article/\\d+", RegexOptions.Compiled);
+        private Regex _contentregex = new Regex("https://weibo.com/p/\\d+/follow?relate=fans&from=100505&wvr=6&mod=headfans&current=fans#place", RegexOptions.Compiled);
         /// <summary>
         /// 构造函数
         /// </summary>
         /// <param name="abotContext"></param>
-        public Qbai(AbotContext abotContext) : base(abotContext)
+        public WeiBo(AbotContext abotContext) : base(abotContext)
         {
         }
         /// <summary>
@@ -39,36 +34,9 @@ namespace Abot.Logic.reptlie
         {
             try
             {
-                //如果店铺信息
                 if (_contentregex.IsMatch(e.CrawledPage.Uri.AbsoluteUri))
                 {
-                    QbaiInfo qbaiInfo = new QbaiInfo();
-                    qbaiInfo.id = e.CrawledPage.Uri.AbsoluteUri;
-                    //获取笑话主题内容
-                    var info = e.CrawledPage.AngleSharpHtmlDocument.QuerySelector("#single-next-link");
-                    if (info != null)
-                        qbaiInfo.info = info.TextContent;
-                    if (string.IsNullOrEmpty(qbaiInfo.info))
-                        return;
-                    //获取笑话点赞数
-                    var num = e.CrawledPage.AngleSharpHtmlDocument.QuerySelector(".stats-vote i");
-                    if (num != null)
-                    {
-                        int nums = 0;
-                        int.TryParse(num.TextContent, out nums);
-                        //好笑数小于500的，不获取
-                        if (nums < 500)
-                            return;
-                        qbaiInfo.silmeNum = nums;
-                    }
-                    //获取作者名字
-                    var name = e.CrawledPage.AngleSharpHtmlDocument.QuerySelector(".author img");
-                    if (name != null)
-                    {
-                        qbaiInfo.froms = name.Attributes["alt"].Value;
-                    }
-                    MQSend _mqsend = new MQSend();
-                    _mqsend.send("qbais", JsonConvert.SerializeObject(qbaiInfo));
+                   
                 }
             }
             catch (Exception es)

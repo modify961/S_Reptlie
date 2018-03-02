@@ -27,6 +27,6 @@ namespace Abot.Logic.model
         /// <summary>
         /// 来源
         /// </summary>
-        public string from { get; set; }
+        public string froms { get; set; }
     }
 }

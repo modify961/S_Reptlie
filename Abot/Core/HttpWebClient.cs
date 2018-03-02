@@ -81,13 +81,13 @@ namespace Abot.Core
             /******************
             * 使用代理IP
             * ****************/
-            AgentHelp agentHelp = new AgentHelp();
-            Agenter agenter = agentHelp.next(new ZhiLianCheck());
-            if (agenter != null)
-            {
-                WebProxy proxy = new WebProxy(agenter.ip, agenter.port);
-                request.Proxy = proxy;
-            }
+            //AgentHelp agentHelp = new AgentHelp();
+            //Agenter agenter = agentHelp.next(new ZhiLianCheck());
+            //if (agenter != null)
+            //{
+            //    WebProxy proxy = new WebProxy(agenter.ip, agenter.port);
+            //    request.Proxy = proxy;
+            //}
             /*****************代理结束***********************/
             #region 添加Post 参数  
             if (contentEncode == null)

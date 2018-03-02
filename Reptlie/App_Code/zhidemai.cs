@@ -4,8 +4,8 @@ using Abot.Poco;
 using AngleSharp.Dom;
 using AngleSharp.Dom.Html;
 using AngleSharp.Parser.Html;
-using HtmlAgilityPack;
 using Newtonsoft.Json;
+using Quartz;
 using RabbitMQHelper;
 using System;
 using System.Collections.Generic;
@@ -13,34 +13,30 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
 
-public partial class requestPage : System.Web.UI.Page
+/// <summary>
+/// zhidemai 的摘要说明
+/// </summary>
+public class Zhidemai : IJob
 {
-    protected void Page_Load(object sender, EventArgs e)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="context"></param>
+    public void Execute(IJobExecutionContext context)
     {
-        Label1.Text = AgentSingleton.getInstance.count().ToString();
-    }
-
-    protected void Button1_Click(object sender, EventArgs e)
-    {
-        HttpWebRequest request = null;
-        HttpWebResponse response = null;
         try
         {
-            System.GC.Collect();
-            string heads = @"Accept:text / html,application / xhtml + xml,application / xml; q = 0.9,image / webp,image / apng,*/*;q=0.8
+            string heads = @"Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8
 Accept-Encoding:gzip, deflate, br
 Accept-Language:zh-CN,zh;q=0.9
 Cache-Control:max-age=0
 Connection:keep-alive
-Cookie:__ckguid=wpX55KBSWp3feVVF4HRGEb6; __jsluid=c62c82c627cacd4d8c832e85725b1a56; PHPSESSID=c26a856292ca6dbfa3bf2d124b6e58a0; device_id=18646516791519304501291711b882c270003741763b0c3fc6fc0ff579; smzdm_user_view=FD22EEE35F4BF3A5ADD5D3FC3BA06791; smzdm_user_source=D38480FA8E45FC33BEC783F01C3604F7; wt3_sid=%3B999768690672041; wt3_eid=%3B999768690672041%7C2151930462700918218%232151930463700133257; Hm_lvt_9b7ac3d38f30fe89ff0b8a0546904e58=1519304593,1519305201; zdm_qd=%7B%22referrer%22%3A%22https%3A%2F%2Fwww.baidu.com%2Flink%3Furl%3DzCzPI2enuj5YTjqH8gM1Kcbiz4Aatpyf1HTdMHFczPpOb1ahOAy8wsJx8RL4ppgh%26wd%3D%26eqid%3Df3e4899b00080928000000035a8ec189%22%7D; amvid=44d7f4fadc2a059dedf69ffbdb91f2bc; Hm_lpvt_9b7ac3d38f30fe89ff0b8a0546904e58=1519305262
+Cookie:__ckguid=T4b5JVGHKqUQ7vRFBux5kK5; __jsluid=acfe0cb47bfacc18e4fa3f7d0918ed12; Hm_lvt_9b7ac3d38f30fe89ff0b8a0546904e58=1519997475; Hm_lpvt_9b7ac3d38f30fe89ff0b8a0546904e58=1519997475; zdm_qd=%7B%7D; amvid=1a1dce82c45301a158da417add7a5c8e; _ga=GA1.2.296996008.1519997476; _gid=GA1.2.2000214778.1519997476; PHPSESSID=ca5f45cce054f7376f41dd0032e5b707; device_id=7948580061519997476602536d609ed09f99907ccf0bfb5c4c3b27854; _gat_UA-27058866-1=1
 Host:www.smzdm.com
 Upgrade-Insecure-Requests:1
-User-Agent:Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36";
+User-Agent:Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36";
 
             string url = "https://www.smzdm.com/fenlei/muyingyongpin/h1c4s0f77t0p1/#feed-main";
             HttpWebClient s = new HttpWebClient(true);
@@ -59,7 +55,7 @@ User-Agent:Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, l
                 if (upDate != null)
                 {
                     string origin = upDate.TextContent;
-                    if (upDate.TextContent.IndexOf("小时") == -1)
+                    if (upDate.TextContent.IndexOf("分钟") == -1)
                     {
                         break;
                     }
@@ -121,64 +117,12 @@ User-Agent:Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, l
                 }
                 list.Add(zhidemaiModel);
             }
-            Response.Write(JsonConvert.SerializeObject(list));
-        }
-        catch (Exception ex)
-        {
-            Response.Write(ex.ToString());
-        }
-        finally
-        {
-            if (response != null)
-            {
-                response.Close();
-                response.Dispose();
-            }
-        }
-    }
-    /// <summary>
-    /// 替换掉字符串中的非数字
-    /// </summary>
-    /// <param name="value"></param>
-    private string regNum(string value)
-    {
-        return Regex.Replace(value, @"[^\d^.]*", "");
-    }
-    /// <summary>
-    /// 替换掉字符串中的空格
-    /// </summary>
-    /// <param name="value"></param>
-    private string regTrim(string value)
-    {
-        return Regex.Replace(value, @"\s", "");
-    }
-    protected void Button2_Click(object sender, EventArgs e)
-    {
-        HttpWebRequest request = null;
-        HttpWebResponse response = null;
-        try
-        {
-            request = BuildRequestObject(new Uri(@"http://www.ip181.com/"));
-            WebProxy webProxy = new WebProxy("112.114.95.156", 8118);
-            request.Proxy = webProxy;
-            response = (HttpWebResponse)request.GetResponse();
-            HttpStatusCode code = response.StatusCode;
+            MQSend _mqsend = new MQSend();
+            _mqsend.send("zidm", JsonConvert.SerializeObject(list));
         }
         catch (Exception ex)
         {
         }
-
-    }
-    protected HttpWebRequest BuildRequestObject(Uri uri)
-    {
-        HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
-        request.AllowAutoRedirect = false;
-        request.UserAgent = "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36";
-        request.Accept = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8";
-        request.Method = "GET";
-        request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
-        request.Timeout = 5 * 1000;
-        return request;
     }
     /// <summary>
     /// 从图片地址下载图片到本地磁盘

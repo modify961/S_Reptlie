@@ -12,6 +12,8 @@
         QuartzHelp.ExecuteByCron<XiciAgent>("0 0/10 * * * ? ");
         //每30分钟从快代理执行一次代理IP检索
         QuartzHelp.ExecuteByCron<KuaidaiAgent>("0 0/30 * * * ? ");
+         //每一小时从只得买获取一次奶粉数据
+        QuartzHelp.ExecuteByCron<KuaidaiAgent>("0 0 0/1 * * ? ");
        
     }
     
